@@ -9,12 +9,11 @@ const RegisterShape = ( props ) => {
 
     const { isSubmitting, touched, errors } = props
 
-    // console.log(props)
 
     const requestErr = errors.requestErr
 
     const history = useHistory()
-    // console.log(Boolean(requestErr))
+    
     return (
         <div>
             <h1>Sign Up</h1>
@@ -48,7 +47,7 @@ const RegisterShape = ( props ) => {
                 </div>
                 <button type = 'submit'>{ isSubmitting ? 
                         <BeatLoader 
-                        size = {10}
+                        size = {8}
                         color = {"#1a1a1a"}
                         /> 
                         : "GET STARTED"}
@@ -57,7 +56,7 @@ const RegisterShape = ( props ) => {
                     Object.values(requestErr.response.data).map(item => {
                         return <p className = "error">{item}</p>
                     })
-                    : "NO ERRORS" }
+                    : null }
             </Form>
         </div>
     )

@@ -11,7 +11,7 @@ function App() {
       <header className="App-header">
       <Switch>
           <Route path='/register' component={Register} />
-          <Route path='/login' render={_=> <Login />} />
+          <Route path='/login' component = {Login} />
           <Route path='play' component={Login} />
         </Switch>
       </header>
