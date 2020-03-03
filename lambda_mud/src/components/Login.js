@@ -3,7 +3,7 @@ import {Form, Field, withFormik} from 'formik'
 import * as Yup from 'yup'
 import BeatLoader from "react-spinners/BeatLoader";
 import axios from 'axios'
-import {useHistory} from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
 
 const LoginShape = ( props ) => {
 
@@ -14,34 +14,35 @@ const LoginShape = ( props ) => {
     const history = useHistory()
     
     return (
-        <div>
+        <div className = 'auth'>
             <h1>Sign In</h1>
             <Form >
-                <div className = "username">
+                <div className = "field">
                     <label htmlFor = "username">
                         USERNAME
                     </label>
-                    <Field name = "username"/>
+                    <Field name = "username" type = 'text'/>
                     { touched.username && errors.username ? 
-                        <p>{touched.username && errors.username}</p>
+                        <p className = 'error'>{touched.username && errors.username}</p>
                     : null }
                 </div>
-                <div>
+                <div className = "field">
                     <label htmlFor = "password">
                         PASSWORD
                     </label>
-                    <Field name = "password" />
+                    <Field name = "password" type='password' />
                     { touched.password && errors.password ? 
-                        <p>{touched.password && errors.password}</p>
+                        <p className = 'error' >{touched.password && errors.password}</p>
                     : null }
                 </div>
                 <button type = 'submit'>{ isSubmitting ? 
                         <BeatLoader 
                         size = {8}
-                        color = {"#1a1a1a"}
+                        color = {"#ca3e47"}
                         /> 
-                        : "GET STARTED"}
+                        : "LOGIN"}
                 </button>
+                <p className = 'auth-link'>Don't have an account yet? <Link to ='/register'>Register here</Link></p>
                 {Boolean(requestErr) ?
                     Object.values(requestErr.response.data).map(item => {
                         return <p className = "error" key = {Date.now()}>{item}</p>
@@ -79,6 +80,7 @@ const Login = withFormik({
         props.setSubmitting(true)
         
         axios.post(`https://ferrari-mud.herokuapp.com/api/login/`, packet)
+
         .then(res => {
             localStorage.setItem("key", res.data.key)
             props.setSubmitting(false)

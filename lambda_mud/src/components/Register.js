@@ -3,7 +3,7 @@ import {Form, Field, withFormik} from 'formik'
 import * as Yup from 'yup'
 import BeatLoader from "react-spinners/BeatLoader";
 import axios from 'axios'
-import {useHistory} from 'react-router-dom'
+import {useHistory, Link} from 'react-router-dom'
 
 const RegisterShape = ( props ) => {
 
@@ -13,36 +13,36 @@ const RegisterShape = ( props ) => {
     const requestErr = errors.requestErr
 
     const history = useHistory()
-    
+
     return (
-        <div>
+        <div className = 'auth'>
             <h1>Sign Up</h1>
             <Form >
-                <div className = "username">
+                <div className = "field">
                     <label htmlFor = "username">
                         USERNAME
                     </label>
-                    <Field name = "username"/>
+                    <Field name = "username" type = 'text'/>
                     { touched.username && errors.username ? 
-                        <p>{touched.username && errors.username}</p>
+                        <p className = 'error' >{touched.username && errors.username}</p>
                     : null }
                 </div>
-                <div>
+                <div className = "field">
                     <label htmlFor = "password">
                         PASSWORD
                     </label>
-                    <Field name = "password" />
+                    <Field name = "password" type= 'password' />
                     { touched.password && errors.password ? 
-                        <p>{touched.password && errors.password}</p>
+                        <p className = 'error' >{touched.password && errors.password}</p>
                     : null }
                 </div>
-                <div className = "confirm password">
+                <div className = "confirm password field">
                     <label htmlFor = "confirmPassword">
                         CONFIRM PASSWORD
                     </label>
-                    <Field name = "confirmPassword" />
+                    <Field name = "confirmPassword" type = 'password'/>
                     { touched.confirmPassword && errors.confirmPassword ? 
-                        <p>{touched.confirmPassword && errors.confirmPassword}</p>
+                        <p className = 'error' >{touched.confirmPassword && errors.confirmPassword}</p>
                     : null }
                 </div>
                 <button type = 'submit'>{ isSubmitting ? 
@@ -52,6 +52,7 @@ const RegisterShape = ( props ) => {
                         /> 
                         : "GET STARTED"}
                 </button>
+                <p className = 'auth-link'>Already have an account? <Link to ='/login'>Login here</Link></p>
                 {Boolean(requestErr) ?
                     Object.values(requestErr.response.data).map(item => {
                         return <p className = "error">{item}</p>
