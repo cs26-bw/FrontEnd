@@ -24,8 +24,8 @@ const RegisterShape = ( props ) => {
                     </label>
                     <Field name = "username" type = 'text'/>
                     { touched.username && errors.username ? 
-                        <p className = 'error' >{touched.username && errors.username}</p>
-                    : null }
+                        <p className = 'error show' >{touched.username && errors.username}</p>
+                    : <p className = 'error hide' >{touched.username && errors.username}</p> }
                 </div>
                 <div className = "field">
                     <label htmlFor = "password">
@@ -33,8 +33,9 @@ const RegisterShape = ( props ) => {
                     </label>
                     <Field name = "password" type= 'password' />
                     { touched.password && errors.password ? 
-                        <p className = 'error' >{touched.password && errors.password}</p>
-                    : null }
+                        <p className = 'error show' >{touched.password && errors.password}</p>
+                        :  <p className = 'error hide' >{touched.password && errors.password}</p>
+                    }
                 </div>
                 <div className = "confirm password field">
                     <label htmlFor = "confirmPassword">
@@ -42,8 +43,8 @@ const RegisterShape = ( props ) => {
                     </label>
                     <Field name = "confirmPassword" type = 'password'/>
                     { touched.confirmPassword && errors.confirmPassword ? 
-                        <p className = 'error' >{touched.confirmPassword && errors.confirmPassword}</p>
-                    : null }
+                        <p className = 'error show' >{touched.confirmPassword && errors.confirmPassword}</p>
+                    : <p className = 'error hide' >{touched.confirmPassword && errors.confirmPassword}</p> }
                 </div>
                 <button type = 'submit'>{ isSubmitting ? 
                         <BeatLoader 
@@ -55,7 +56,7 @@ const RegisterShape = ( props ) => {
                 <p className = 'auth-link'>Already have an account? <Link to ='/login'>Login here</Link></p>
                 {Boolean(requestErr) ?
                     Object.values(requestErr.response.data).map(item => {
-                        return <p className = "error">{item}</p>
+                        return <p className = "error response">{item}</p>
                     })
                     : null }
             </Form>

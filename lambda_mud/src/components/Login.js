@@ -23,8 +23,8 @@ const LoginShape = ( props ) => {
                     </label>
                     <Field name = "username" type = 'text'/>
                     { touched.username && errors.username ? 
-                        <p className = 'error'>{touched.username && errors.username}</p>
-                    : null }
+                        <p className = 'error show'>{touched.username && errors.username}</p>
+                    : <p className = 'error hide'>{touched.username && errors.username}</p> }
                 </div>
                 <div className = "field">
                     <label htmlFor = "password">
@@ -32,22 +32,22 @@ const LoginShape = ( props ) => {
                     </label>
                     <Field name = "password" type='password' />
                     { touched.password && errors.password ? 
-                        <p className = 'error' >{touched.password && errors.password}</p>
-                    : null }
+                        <p className = 'error show' >{touched.password && errors.password}</p>
+                    : <p className = 'error hide' >{touched.password && errors.password}</p> }
                 </div>
                 <button type = 'submit'>{ isSubmitting ? 
                         <BeatLoader 
                         size = {8}
-                        color = {"#ca3e47"}
+                        color = {"#313131"}
                         /> 
-                        : "LOGIN"}
+                        : "LOG IN"}
                 </button>
                 <p className = 'auth-link'>Don't have an account yet? <Link to ='/register'>Register here</Link></p>
                 {Boolean(requestErr) ?
                     Object.values(requestErr.response.data).map(item => {
-                        return <p className = "error" key = {Date.now()}>{item}</p>
+                        return <p className = "error response" key = {Date.now()}>{item}</p>
                     })
-                    : null }
+                    : null}
             </Form>
         </div>
     )
@@ -80,7 +80,6 @@ const Login = withFormik({
         props.setSubmitting(true)
         
         axios.post(`https://ferrari-mud.herokuapp.com/api/login/`, packet)
-
         .then(res => {
             localStorage.setItem("key", res.data.key)
             props.setSubmitting(false)
