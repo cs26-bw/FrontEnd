@@ -9,9 +9,10 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Switch>
-          <Route path='/register' render={_ => <Register />} />
+      <Switch>
+          <Route path='/register' component={Register} />
           <Route path='/login' render={_=> <Login />} />
+          <Route path='play' component={Login} />
         </Switch>
       </header>
     </div>

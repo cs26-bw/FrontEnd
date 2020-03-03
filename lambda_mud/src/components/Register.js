@@ -2,15 +2,23 @@ import React, {useState} from 'react'
 import {Form, Field, withFormik} from 'formik'
 import * as Yup from 'yup'
 import BeatLoader from "react-spinners/BeatLoader";
+import axios from 'axios'
+import {useHistory} from 'react-router-dom'
 
 const RegisterShape = ( props ) => {
 
     const { isSubmitting, touched, errors } = props
 
+    // console.log(props)
+
+    const requestErr = errors.requestErr
+
+    const history = useHistory()
+    // console.log(Boolean(requestErr))
     return (
         <div>
             <h1>Sign Up</h1>
-            <Form>
+            <Form >
                 <div className = "username">
                     <label htmlFor = "username">
                         USERNAME
@@ -40,11 +48,16 @@ const RegisterShape = ( props ) => {
                 </div>
                 <button type = 'submit'>{ isSubmitting ? 
                         <BeatLoader 
-                        size = {50}
+                        size = {10}
                         color = {"#1a1a1a"}
                         /> 
                         : "GET STARTED"}
                 </button>
+                {Boolean(requestErr) ?
+                    Object.values(requestErr.response.data).map(item => {
+                        return <p className = "error">{item}</p>
+                    })
+                    : "NO ERRORS" }
             </Form>
         </div>
     )
@@ -79,14 +92,27 @@ const Register = withFormik({
     }),
     handleSubmit(values, props){
 
+        const { history } = props.props
+
         const packet = {
             username: values.username,
-            email: values.email,
-            password: values.password
+            password1: values.password,
+            password2: values.confirmPassword
         }
 
-        console.log(props)
         props.setSubmitting(true)
+        
+        axios.post(`https://ferrari-mud.herokuapp.com/api/registration/`, packet)
+        .then(res => {
+            localStorage.setItem("key", res.data.key)
+            props.setSubmitting(false)
+            history.push("/play")
+        })
+        .catch(err => { 
+            props.setSubmitting(false)
+            props.setErrors({requestErr: err})
+        })
+        
         
     }
     
