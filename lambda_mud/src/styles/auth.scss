@@ -28,7 +28,9 @@
             flex-direction: column;
             height:6rem;
             padding: 1rem 0;
+            position: relative;
             label{
+                color: #ffffff;
                 font-size: .7rem;
                 font-weight: bold;
                 padding-bottom: .4rem;
@@ -37,10 +39,19 @@
                 border: none;
                 border-radius: 8px;
                 background: $secondary-medium-grey;
-                height: 2.4rem;
+                height: 2.8rem;
                 color: #ffffff;
                 font-size: 1.2rem;
                 padding: .2rem .6rem;
+            }
+
+            .eye.icon{
+                position: absolute;
+                right: .5rem;
+                top:58%;
+                color: $red;
+                display: inline;
+                cursor: pointer;
             }
 
         }
