@@ -52,6 +52,7 @@ input{
 	font-family: "Spartan", "Raleway", "Source Sans Pro", "Poppins", "Open Sans",  Arial, Helvetica, sans-serif;
 }
 
+@import './styles/nav.scss';
 @import './styles/auth.scss';
 
 .root{
