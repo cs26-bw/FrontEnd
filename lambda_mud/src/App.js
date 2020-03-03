@@ -8,6 +8,9 @@ import NavBar from './components/Nav'
 import Register from './components/Register'
 import Login from './components/Login'
 
+
+// small change
+
 function App() {
   return (
     <div className="App">
@@ -16,7 +19,7 @@ function App() {
       <Switch>
           <Route path='/register' component={Register} />
           <Route path='/login' component = {Login} />
-          <Route path='play' component={Login} />
+          <Route path='/play' component={Login} />
         </Switch>
       </header>
     </div>
