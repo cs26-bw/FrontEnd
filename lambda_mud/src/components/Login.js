@@ -4,7 +4,7 @@ import * as Yup from 'yup'
 import BeatLoader from "react-spinners/BeatLoader";
 import axios from 'axios'
 import { useHistory, Link } from 'react-router-dom'
-
+import {Icon, Input} from 'semantic-ui-react'
 const LoginShape = ( props ) => {
 
     const { isSubmitting, touched, errors } = props
@@ -12,12 +12,18 @@ const LoginShape = ( props ) => {
     const requestErr = errors.requestErr
 
     const history = useHistory()
+
+    const [ showPassword, setShowPassword ] = useState(false)
     
+    const updateShow = (state) => {
+        setShowPassword(!state)
+    }
+
     return (
         <div className = 'auth'>
             <h1>Sign In</h1>
             <Form >
-                <div className = "field">
+                <Input className = "field">
                     <label htmlFor = "username">
                         USERNAME
                     </label>
@@ -25,16 +31,18 @@ const LoginShape = ( props ) => {
                     { touched.username && errors.username ? 
                         <p className = 'error show'>{touched.username && errors.username}</p>
                     : <p className = 'error hide'>{touched.username && errors.username}</p> }
-                </div>
-                <div className = "field">
+                </Input>
+                <Input className = "field">
                     <label htmlFor = "password">
                         PASSWORD
                     </label>
-                    <Field name = "password" type='password' />
-                    { touched.password && errors.password ? 
-                        <p className = 'error show' >{touched.password && errors.password}</p>
-                    : <p className = 'error hide' >{touched.password && errors.password}</p> }
-                </div>
+                    <Field name = "password" type={showPassword ? 'text' : 'password'} />
+                     <Icon name = 'eye' onClick = {() => updateShow(showPassword)} />
+                     { touched.password && errors.password ? 
+                         <p className = 'error show' >{touched.password && errors.password}</p>
+                     : <p className = 'error hide' >{touched.password && errors.password}</p> }
+                    
+                </Input>
                 <button type = 'submit'>{ isSubmitting ? 
                         <BeatLoader 
                         size = {8}

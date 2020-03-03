@@ -4,6 +4,7 @@ import * as Yup from 'yup'
 import BeatLoader from "react-spinners/BeatLoader";
 import axios from 'axios'
 import {useHistory, Link} from 'react-router-dom'
+import { Input, Icon } from 'semantic-ui-react';
 
 const RegisterShape = ( props ) => {
 
@@ -14,11 +15,16 @@ const RegisterShape = ( props ) => {
 
     const history = useHistory()
 
+    const [ showPassword, setShowPassword ] = useState(false)
+
+    const [ showConfirm, setShowConfirm] = useState(false)
+    
+
     return (
         <div className = 'auth'>
             <h1>Sign Up</h1>
             <Form >
-                <div className = "field">
+                <Input className = "field">
                     <label htmlFor = "username">
                         USERNAME
                     </label>
@@ -26,26 +32,28 @@ const RegisterShape = ( props ) => {
                     { touched.username && errors.username ? 
                         <p className = 'error show' >{touched.username && errors.username}</p>
                     : <p className = 'error hide' >{touched.username && errors.username}</p> }
-                </div>
-                <div className = "field">
+                </Input>
+                <Input className = "field">
                     <label htmlFor = "password">
                         PASSWORD
                     </label>
-                    <Field name = "password" type= 'password' />
+                    <Field name = "password" type={showPassword ? 'text' : 'password'} />
+                    <Icon name = 'eye' onClick = {() => setShowPassword(!showPassword)} />
                     { touched.password && errors.password ? 
                         <p className = 'error show' >{touched.password && errors.password}</p>
                         :  <p className = 'error hide' >{touched.password && errors.password}</p>
                     }
-                </div>
-                <div className = "confirm password field">
+                </Input>
+                <Input className = "confirm password field">
                     <label htmlFor = "confirmPassword">
                         CONFIRM PASSWORD
                     </label>
-                    <Field name = "confirmPassword" type = 'password'/>
+                    <Field name = "confirmPassword" type={showConfirm ? 'text' : 'password'}/>
+                    <Icon name = 'eye' onClick = {() => setShowConfirm(!showConfirm)} />
                     { touched.confirmPassword && errors.confirmPassword ? 
                         <p className = 'error show' >{touched.confirmPassword && errors.confirmPassword}</p>
                     : <p className = 'error hide' >{touched.confirmPassword && errors.confirmPassword}</p> }
-                </div>
+                </Input>
                 <button type = 'submit'>{ isSubmitting ? 
                         <BeatLoader 
                         size = {8}
@@ -56,7 +64,7 @@ const RegisterShape = ( props ) => {
                 <p className = 'auth-link'>Already have an account? <Link to ='/login'>Login here</Link></p>
                 {Boolean(requestErr) ?
                     Object.values(requestErr.response.data).map(item => {
-                        return <p className = "error response">{item}</p>
+                        return <p className = "error response" key = {Date.now()}>{item}</p>
                     })
                     : null }
             </Form>
