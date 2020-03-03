@@ -2,6 +2,8 @@
   "name": "lambda_mud",
   "version": "0.1.0",
   "private": true,
+  "presets": ["@babel/preset-react", "@babel/preset-env"],
+  "plugins": ["emotion"],
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
@@ -9,7 +11,9 @@
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.4.0"
+    "react-scripts": "3.4.0",
+    "react-spinners": "^0.8.0",
+    "yup": "^0.28.1"
   },
   "scripts": {
     "start": "react-scripts start",
