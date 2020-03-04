@@ -10,8 +10,12 @@ const override = css`
   left: 50%;
 `;
 
+let formattedRooms = {}
+
 function Map() {
 
+    console.log("Rerendering Map", formattedRooms)
+    
     const [currentRoom, setCurrentRoom] = useState(null)
     const [requestErr, setRequestErr] = useState(null)
     const [loading, setLoading] = useState(false)
@@ -23,6 +27,8 @@ function Map() {
         axiosWithAuth()
         .get('https://ferrari-mud.herokuapp.com/api/adv/init')
         .then(res => {
+            res.data.id = res.data.room_id
+            delete res.data.room_id
             setCurrentRoom(res.data)
             setLoading(false)
         })
@@ -48,15 +54,14 @@ function Map() {
         })
     },[])
 
-    console.log(rooms);
-    
+    // ! canvas logic starts here
     const [canvas, setCanvas] = useState();
 
     let canvasRef = React.createRef();
+    let canvasContainerRef = React.createRef();
 
     useEffect(() => {
         setCanvas(canvasRef.current);
-        // console.log("Canvas:", canvas)
         resizeCanvas(); //do an initial resize for when it first renders, this function will also be called every time the window is resized too
     }, [canvasRef])
 
@@ -68,8 +73,11 @@ function Map() {
 
     function resizeCanvas() {
         if (canvas) {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            console.log("setting canvas size to", canvasContainerRef.clientWidth, canvasContainerRef.clientHeight)
+            console.log(canvasContainerRef)
+            canvas.width = canvasContainerRef.current.clientWidth
+            canvas.height = canvasContainerRef.current.clientHeight
+            frame(0);
         }
     }
 
@@ -82,8 +90,6 @@ function Map() {
     }
 
     let lastTime
-
-    let formattedRooms = {};
 
     useEffect(() => {
 
@@ -103,76 +109,80 @@ function Map() {
                 frame(0)
         }
 
-
         
-    },[rooms])
+    }, [rooms])
 
     if (canvas) {
         //frame(0); //start the frame loop
     }
 
+    //draw map here
     function frame(currentTime) {
-        //draw map here
+
         let c = canvas.getContext("2d")
 
         setStyles(c)
 
-        c.clearRect(0, 0, window.innerWidth, window.innerHeight);//clear previous frame
+        c.clearRect(0, 0, canvas.width, canvas.height);//clear previous frame
         
         if (!lastTime) lastTime = currentTime;
         let deltaTime = currentTime - lastTime;//time since last frame
         lastTime = currentTime;
-
-        // textPos.x += textVel.x * deltaTime/4
-        // textPos.y += textVel.y * deltaTime/4
-
-        // if(textPos.x > window.innerWidth || textPos.x < 0){
-        //     textVel.x *= -1
-        // }
-
-        // if(textPos.y > window.innerHeight || textPos.y < 0){
-        //     textVel.y *= -1
-        // }
-
-        // //console.log("Drawing at", textPos.x, textPos.y)
-        // c.fillText("Canvas Test", textPos.x, textPos.y);
-
-        c.beginPath();
-        c.arc(500, 500, 10, 0, 2 * Math.PI);
-        c.fill();
         
-        c.beginPath();
-        c.fillRect(500, 498, 100, 5);
-
-        c.beginPath();
-        c.arc(600, 500, 10, 0, 2 * Math.PI);
-        c.fill();
-        
-        
+        c.fillStyle = "black";
     
         const roomsLength = Object.keys(formattedRooms).length
-
-        console.log("length", roomsLength)
-        
-        // for (let i = 1; i <= roomsLength; i++) {
-        //     console.log('here');
-        //     c.fillRect(200, 398, 300, 100);
-        //     c.fillRect(500, 498, 100, 100);
-        // }
         
         for (let room in formattedRooms) {
-            console.log(formattedRooms[room])
-            formattedRooms[room].draw(c)
-            //c.fillRect(500, 498, 100, 100);
+            formattedRooms[room].draw(c, formattedRooms[currentRoom.id])
         }
 
         //requestAnimationFrame(frame);
     }
 
+    // ! canvas logic ends here
 
+    // !keyboard movement logic
+
+    useEffect(() => {
+        
+        const handleMove = (e) => {
+            
+            // avoiding errors on initial render when current room is null
+            if (!currentRoom){
+                return
+            } 
+            
+            const current = formattedRooms[currentRoom.id]
+            
+            if (e.key === "ArrowRight") {
+                if(current.east.id){
+                    setCurrentRoom(formattedRooms[current.east.id])
+                }
+            }else if (e.key === "ArrowLeft") {
+                if(current.west.id){
+                    setCurrentRoom(formattedRooms[current.west.id])
+                }
+            }else if (e.key === "ArrowDown") {
+                if(current.south.id){
+                    setCurrentRoom(formattedRooms[current.south.id])
+                }
+            }else if (e.key === "ArrowUp") {
+                if(current.north.id){
+                    setCurrentRoom(formattedRooms[current.north.id])
+                }
+            }
+            
+        }
+        
+        window.addEventListener('keydown', e => handleMove(e))
+        
+        return window.removeEventListener('keydown', handleMove)
+
+    }, [currentRoom])
 
     return ( 
-    <div className = "Map">
+    <div ref={canvasContainerRef} className = "Map">
         {
             loading ?
             <HashLoader 

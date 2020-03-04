@@ -1,6 +1,7 @@
 // 
 
 class Room{
+
     constructor(id, title, description, north, south, east, west, x, y){
         this.id = id;
         this.title = title;
@@ -9,39 +10,109 @@ class Room{
         this.east = east; 
         this.south = south;
         this.west = west;
-        this.x = x * 100;
-        this.y = y * 100;
+        this.x = x;
+        this.y = y;
     }
+
     // draw method
+    draw (c, currentRoom, size = null) {
 
-}
 
-Room.prototype.draw = function(c) {
+        //adjust this room's position so that the player's room is always drawn in the center of the screen
+        let adjustedPosition = { x: ((this.x - currentRoom.x) * 100 ) + (window.innerWidth / 2), y: ((this.y - currentRoom.y) * 100) + (window.innerHeight/2) }
 
-    c.beginPath();
-    c.arc(this.x, this.y, 10, 0, 2 * Math.PI);
-    c.fill();
+        let isCurrentRoom = this.id === currentRoom.id ? true : false
+
+        c.fillStyle = "black";
+        
+        if(this.north.title) {
+            c.beginPath();
+            c.fillRect(adjustedPosition.x, adjustedPosition.y, 5, 50);
+        }
+        if(this.east.title) {
+            c.beginPath();
+            c.fillRect(adjustedPosition.x, adjustedPosition.y, 50, 5);
+        }
     
-    if(this.north) {
+        if(this.south.title) {
+            c.beginPath();
+            c.fillRect(adjustedPosition.x, adjustedPosition.y, 5, -50);
+        }
+    
+        if(this.west.title) {
+            c.beginPath();
+            c.fillRect(adjustedPosition.x, adjustedPosition.y, -50, 5);
+        }
+        
+        
+        if(isCurrentRoom) {
+            c.fillStyle = "red";
+        }else {
+            c.fillStyle = "black";
+        }
+
         c.beginPath();
-        c.fillRect(this.x, this.y, 5, -100);
-    }
-    if(this.east) {
-        c.beginPath();
-        c.fillRect(this.x, this.y, 100, 5);
+        c.arc(adjustedPosition.x, adjustedPosition.y, 10, 0, 2 * Math.PI);
+        c.fill();
+
     }
 
-    if(this.south) {
-        c.beginPath();
-        c.fillRect(this.x, this.y, 5, 100);
-    }
-
-    if(this.west) {
-        c.beginPath();
-        c.fillRect(this.x, this.y, -100, 5);
-    }
-
-    return c
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 }
 
