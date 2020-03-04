@@ -73,8 +73,8 @@ function Map() {
 
     function resizeCanvas() {
         if (canvas) {
-            console.log("setting canvas size to", canvasContainerRef.clientWidth, canvasContainerRef.clientHeight)
-            console.log(canvasContainerRef)
+            // console.log("setting canvas size to", canvasContainerRef.clientWidth, canvasContainerRef.clientHeight)
+            // console.log(canvasContainerRef)
             canvas.width = canvasContainerRef.current.clientWidth
             canvas.height = canvasContainerRef.current.clientHeight
             frame(0);
@@ -92,6 +92,8 @@ function Map() {
     let lastTime
 
     useEffect(() => {
+
+        formattedRooms = {}
 
         if(rooms){
             rooms.forEach(room => formattedRooms[`${room.id}`] = new Room(
@@ -154,22 +156,36 @@ function Map() {
             } 
             
             const current = formattedRooms[currentRoom.id]
+
+            // console.log(current)
             
             if (e.key === "ArrowRight") {
                 if(current.east.id){
                     setCurrentRoom(formattedRooms[current.east.id])
+                }else{
+                    setCurrentRoom(formattedRooms[current.id])
                 }
             }else if (e.key === "ArrowLeft") {
                 if(current.west.id){
                     setCurrentRoom(formattedRooms[current.west.id])
+                }else{
+                    setCurrentRoom(formattedRooms[current.id])
                 }
-            }else if (e.key === "ArrowDown") {
+
+            }else if (e.key === "ArrowUp") {
+
                 if(current.south.id){
                     setCurrentRoom(formattedRooms[current.south.id])
+                }else{
+                    setCurrentRoom(formattedRooms[current.id])
                 }
-            }else if (e.key === "ArrowUp") {
+
+            }else if (e.key === "ArrowDown") {
+
                 if(current.north.id){
                     setCurrentRoom(formattedRooms[current.north.id])
+                }else{
+                    setCurrentRoom(formattedRooms[current.id])
                 }
             }
             
@@ -180,6 +196,7 @@ function Map() {
         return window.removeEventListener('keydown', handleMove)
 
     }, [currentRoom])
+
 
     return ( 
     <div ref={canvasContainerRef} className = "Map">
