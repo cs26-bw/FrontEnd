@@ -51,7 +51,6 @@ function Map() {
         })
     },[])
 
-    console.log(rooms)
 
     const [canvas, setCanvas] = useState();
 
@@ -59,7 +58,7 @@ function Map() {
 
     useEffect(() => {
         setCanvas(canvasRef.current);
-        console.log("Canvas:", canvas)
+        // console.log("Canvas:", canvas)
         resizeCanvas(); //do an initial resize for when it first renders, this function will also be called every time the window is resized too
     }, [canvasRef])
 
