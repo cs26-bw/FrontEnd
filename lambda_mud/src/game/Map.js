@@ -1,7 +1,4 @@
-import React, {
-    useState,
-    useEffect
-} from 'react';
+import React, { useState, useEffect } from 'react';
 
 import {axiosWithAuth} from '../utils/AxiosWithAuth'
 import HashLoader from "react-spinners/HashLoader";
@@ -91,7 +88,6 @@ function Map() {
     useEffect(() => {
 
         if(rooms){
-
             rooms.forEach(room => formattedRooms[`${room.id}`] = new Room(
                 room.id, 
                 room.title, 
@@ -104,13 +100,15 @@ function Map() {
                 room.y
                 ))
 
+                frame(0)
         }
+
 
         
     },[rooms])
 
     if (canvas) {
-        frame(0); //start the frame loop
+        //frame(0); //start the frame loop
     }
 
     function frame(currentTime) {
@@ -146,15 +144,32 @@ function Map() {
         c.beginPath();
         c.fillRect(500, 498, 100, 5);
 
-        c.fillRect(500, 500, -500, -500);
-
         c.beginPath();
         c.arc(600, 500, 10, 0, 2 * Math.PI);
         c.fill();
-        // c.fillRect(100, 100, 100, 100)
+        
+        
+    
+        const roomsLength = Object.keys(formattedRooms).length
 
-        requestAnimationFrame(frame);
+        console.log("length", roomsLength)
+        
+        // for (let i = 1; i <= roomsLength; i++) {
+        //     console.log('here');
+        //     c.fillRect(200, 398, 300, 100);
+        //     c.fillRect(500, 498, 100, 100);
+        // }
+        
+        for (let room in formattedRooms) {
+            console.log(formattedRooms[room])
+            formattedRooms[room].draw(c)
+            //c.fillRect(500, 498, 100, 100);
+        }
+
+        //requestAnimationFrame(frame);
     }
+
+
 
     return ( 
     <div className = "Map">
