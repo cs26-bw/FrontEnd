@@ -37,7 +37,7 @@ const LoginShape = ( props ) => {
                         PASSWORD
                     </label>
                     <Field name = "password" type={showPassword ? 'text' : 'password'} />
-                     <Icon name = 'eye' onClick = {() => updateShow(showPassword)} />
+                     <Icon name = 'eye' onClick = {() => updateShow(showPassword)} className = {showPassword ? "show" : "hide"}/>
                      { touched.password && errors.password ? 
                          <p className = 'error show' >{touched.password && errors.password}</p>
                      : <p className = 'error hide' >{touched.password && errors.password}</p> }
