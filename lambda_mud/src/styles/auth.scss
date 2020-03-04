@@ -9,10 +9,20 @@
     align-items: center;
     color: #ffffff;
 
+
     h1{
         font-size: 2.4rem;
         font-weight: bold;
         padding-bottom: 1rem;
+        @include tablet{
+            font-size: 2rem;
+        }
+
+        @include mobile{
+            font-size: 1.8rem;
+            transform: translateY(-50%);
+        }
+
     }
 
     form{
@@ -21,13 +31,39 @@
         width: 30%;
         display: flex;
         flex-direction: column;
+        overflow: hidden;
+
+        @include xl-tablet{
+            width: 60%;
+        }
+
+        @include tablet{
+            padding-top: 1rem;
+        }
+
+        @include mobile{
+            width: 100%;
+            padding-top: 0;
+        }
 
         .field{
             display: flex;
             flex-direction: column;
             height:6rem;
             padding: 1rem 0;
+            position: relative;
+            margin-bottom: 1.4rem;
+            @include xl-tablet{
+                height: 8rem;
+                padding: 1.4rem 0;
+            }
+
+            @include mobile{
+                margin-bottom: 0;
+            }
+
             label{
+                color: #ffffff;
                 font-size: .7rem;
                 font-weight: bold;
                 padding-bottom: .4rem;
@@ -36,22 +72,84 @@
                 border: none;
                 border-radius: 8px;
                 background: $secondary-medium-grey;
-                height: 2.4rem;
+                // height: 2.8rem;
                 color: #ffffff;
                 font-size: 1.2rem;
-                padding: .2rem .6rem;
+                // padding: .2rem .6rem;
+            }
+            
+            .eye.icon.hide{
+
+                position: absolute;
+                right: .5rem;
+                top:58%;
+                display: inline;
+                color: $red;
+                cursor: pointer;
+                transition: all .25s ease-in-out;
+                @include xl-tablet{
+                    top: 48%;
+                }
+                
+                @include mobile{
+                    top: 52%
+                }
+                
+            }
+            
+            .eye.icon.show{
+                position: absolute;
+                right: .5rem;
+                top:58%;
+                color: #ffffff;
+                display: inline;
+                cursor: pointer;
+                transition: all .25s ease-in-out;
+
+                @include xl-tablet{
+                    top: 48%;
+                }
+
+                @include mobile{
+                    top: 52%
+                }
+
             }
 
+
+
+
         }
-        .error{
+        .error.hide{
+            transform: translateX(-30%);
+            opacity: .1;
+        }
+
+        
+        
+        .error.show{
+            opacity: 1;
             color: $red;
             font-size: .8rem;
             font-style: italic;
             padding-top: .8rem;
+            transform: translateX(0);
+            padding-bottom: 1.2rem;
+            transition: 
+            transform .25s ease-in-out,
+            opacity .25s ease-in-out;
+        }
+        
+        .error.response{
+            color: $red;
+            font-size: 1rem;
+            padding-top: 1.4rem;
+            font-weight: bold;
+            text-align: center;
         }
 
         button{
-            height: 2.2rem;
+            height: 2.6rem;
             border: none;
             font-family: "Spartan", "Raleway", "Source Sans Pro", "Poppins", "Open Sans",  Arial, Helvetica, sans-serif;
             background: $red;
@@ -60,7 +158,17 @@
             cursor: pointer;
             border-radius: 6px;
             width: 45%;
-            margin: 0 auto 0 0;
+            margin: 2rem auto 0 0;
+
+            @include xl-tablet{
+                width: 40%;
+            
+            }
+
+            @include mobile{
+                width: 50%;
+            }
+
         }
 
         .auth-link{
@@ -71,6 +179,11 @@
                 font-size: .7rem;
                 text-decoration: none;
                 color: $red;
+            }
+
+            @include xl-tablet{
+                padding-top: 3rem;
+            
             }
         }
     }
