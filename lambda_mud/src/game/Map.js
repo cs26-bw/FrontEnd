@@ -1,9 +1,13 @@
+
 import React, { useState, useEffect } from 'react';
+
 
 import {axiosWithAuth} from '../utils/AxiosWithAuth'
 import HashLoader from "react-spinners/HashLoader";
 import { css } from "@emotion/core";
+
 import Room from './Room'
+
 const override = css`
   position: absolute;
   top:50%;
@@ -14,6 +18,7 @@ let formattedRooms = {}
 
 function Map() {
     
+
     const [currentRoom, setCurrentRoom] = useState(null)
     const [requestErr, setRequestErr] = useState(null)
     const [loading, setLoading] = useState(false)

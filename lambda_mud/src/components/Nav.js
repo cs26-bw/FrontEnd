@@ -6,12 +6,12 @@ import '../styles/nav.scss'
 const NavBar = () => {
 
     return (
-        <div>
+        <div>    
             <nav>
-            <Link to='/'>Home</Link>
-            <Link to='/login'>Login</Link>
-            <Link to='/register'>Register</Link>  
-            </nav>  
+                <Link to='/'>Home</Link>
+                <Link to='/login'>Login</Link>
+                <Link to='/register'>Register</Link> 
+            </nav> 
         </div>
     )
 }
