@@ -15,7 +15,11 @@ import { UserContext } from './contexts/UserContext';
 
 function App() {
 
-  const [user, setUser] = useState({})
+  const [user, setUser] = useState({
+    name: '',
+    title: '',
+    description: ''
+  })
   
   return (
     <div className="App">
