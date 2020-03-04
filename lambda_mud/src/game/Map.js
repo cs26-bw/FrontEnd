@@ -6,7 +6,7 @@ import React, {
 import {axiosWithAuth} from '../utils/AxiosWithAuth'
 import HashLoader from "react-spinners/HashLoader";
 import { css } from "@emotion/core";
-
+import Room from './Room'
 const override = css`
   position: absolute;
   top:50%;
@@ -18,7 +18,7 @@ function Map() {
     const [currentRoom, setCurrentRoom] = useState(null)
     const [requestErr, setRequestErr] = useState(null)
     const [loading, setLoading] = useState(false)
-    const [rooms, setRooms] = useState(true)
+    const [rooms, setRooms] = useState(null)
 
     useEffect(() => {
         // this updates the starting room
@@ -51,7 +51,8 @@ function Map() {
         })
     },[])
 
-
+    console.log(rooms);
+    
     const [canvas, setCanvas] = useState();
 
     let canvasRef = React.createRef();
@@ -85,8 +86,28 @@ function Map() {
 
     let lastTime
 
-    let textPos = {x: 0, y: 0}
-    let textVel = {x: 1, y: 1}
+    let formattedRooms = {};
+
+    useEffect(() => {
+
+        if(rooms){
+
+            rooms.forEach(room => formattedRooms[`${room.id}`] = new Room(
+                room.id, 
+                room.title, 
+                room.description, 
+                room.north, 
+                room.south, 
+                room.east, 
+                room.west, 
+                room.x, 
+                room.y
+                ))
+
+        }
+
+        
+    },[rooms])
 
     if (canvas) {
         frame(0); //start the frame loop
@@ -104,20 +125,32 @@ function Map() {
         let deltaTime = currentTime - lastTime;//time since last frame
         lastTime = currentTime;
 
-        textPos.x += textVel.x * deltaTime/4
-        textPos.y += textVel.y * deltaTime/4
+        // textPos.x += textVel.x * deltaTime/4
+        // textPos.y += textVel.y * deltaTime/4
 
-        if(textPos.x > window.innerWidth || textPos.x < 0){
-            textVel.x *= -1
-        }
+        // if(textPos.x > window.innerWidth || textPos.x < 0){
+        //     textVel.x *= -1
+        // }
 
-        if(textPos.y > window.innerHeight || textPos.y < 0){
-            textVel.y *= -1
-        }
+        // if(textPos.y > window.innerHeight || textPos.y < 0){
+        //     textVel.y *= -1
+        // }
 
-        //console.log("Drawing at", textPos.x, textPos.y)
-        c.fillText("Canvas Test", textPos.x, textPos.y);
+        // //console.log("Drawing at", textPos.x, textPos.y)
+        // c.fillText("Canvas Test", textPos.x, textPos.y);
 
+        c.beginPath();
+        c.arc(500, 500, 10, 0, 2 * Math.PI);
+        c.fill();
+        
+        c.beginPath();
+        c.fillRect(500, 498, 100, 5);
+
+        c.fillRect(500, 500, -500, -500);
+
+        c.beginPath();
+        c.arc(600, 500, 10, 0, 2 * Math.PI);
+        c.fill();
         // c.fillRect(100, 100, 100, 100)
 
         requestAnimationFrame(frame);
