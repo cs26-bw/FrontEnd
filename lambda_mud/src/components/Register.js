@@ -38,7 +38,7 @@ const RegisterShape = ( props ) => {
                         PASSWORD
                     </label>
                     <Field name = "password" type={showPassword ? 'text' : 'password'} />
-                    <Icon name = 'eye' onClick = {() => setShowPassword(!showPassword)} />
+                    <Icon name = 'eye' onClick = {() => setShowPassword(!showPassword)} className = {showPassword ? "show" : "hide"}/>
                     { touched.password && errors.password ? 
                         <p className = 'error show' >{touched.password && errors.password}</p>
                         :  <p className = 'error hide' >{touched.password && errors.password}</p>
@@ -49,7 +49,7 @@ const RegisterShape = ( props ) => {
                         CONFIRM PASSWORD
                     </label>
                     <Field name = "confirmPassword" type={showConfirm ? 'text' : 'password'}/>
-                    <Icon name = 'eye' onClick = {() => setShowConfirm(!showConfirm)} />
+                    <Icon name = 'eye' onClick = {() => setShowConfirm(!showConfirm)} className = {showConfirm ? "show" : "hide"}/>
                     { touched.confirmPassword && errors.confirmPassword ? 
                         <p className = 'error show' >{touched.confirmPassword && errors.confirmPassword}</p>
                     : <p className = 'error hide' >{touched.confirmPassword && errors.confirmPassword}</p> }
