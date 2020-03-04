@@ -2,15 +2,19 @@ nav {
     display: flex;
     justify-content: center;
     background-color: #414141;
+    height: 50px;
 
     a {
-        margin: 15px 50px;
+        margin: auto 50px;
         text-decoration: none;
         color: #ffffff;
         font-weight: bold;
-    }
+    }  
     a:hover {
         color: #ca3e47;
         transition: .3s;
     }
+
+    
 }
+
