@@ -1,11 +1,13 @@
 import React, {
     useState,
-    useEffect
+    useEffect,
+    useContext
 } from 'react';
 
 import {axiosWithAuth} from '../utils/AxiosWithAuth'
 import HashLoader from "react-spinners/HashLoader";
 import { css } from "@emotion/core";
+
 
 const override = css`
   position: absolute;
@@ -14,7 +16,6 @@ const override = css`
 `;
 
 function Map() {
-
     const [currentRoom, setCurrentRoom] = useState(null)
     const [requestErr, setRequestErr] = useState(null)
     const [loading, setLoading] = useState(false)
