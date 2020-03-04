@@ -8,6 +8,7 @@ import NavBar from './components/Nav'
 import Register from './components/Register'
 import Login from './components/Login'
 import Map from "./game/Map"
+import RoomInfo from './game/RoomInfo'
 
 // small change
 
@@ -18,10 +19,11 @@ function App() {
     <div className="App">
       <header className="App-header">
         <NavBar/>
-      <Switch>
+        <Switch>
           <Route path='/register' component={Register} />
           <Route path='/login' component = {Login} />
           <Route path='/' exact component={Map} />
+          <Route path='/room' component={RoomInfo} />
         </Switch>
       </header>
     </div>
