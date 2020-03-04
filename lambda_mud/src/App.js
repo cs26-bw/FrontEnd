@@ -18,7 +18,9 @@ function App() {
   const [user, setUser] = useState({
     name: '',
     title: '',
-    description: ''
+    description: '',
+    room_id: '',
+    error_msg: ''
   })
   
   return (
