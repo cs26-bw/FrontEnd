@@ -13,8 +13,6 @@ const override = css`
 let formattedRooms = {}
 
 function Map() {
-
-    console.log("Rerendering Map", formattedRooms)
     
     const [currentRoom, setCurrentRoom] = useState(null)
     const [requestErr, setRequestErr] = useState(null)
@@ -121,6 +119,7 @@ function Map() {
     //draw map here
     function frame(currentTime) {
 
+
         let c = canvas.getContext("2d")
 
         setStyles(c)
@@ -146,55 +145,58 @@ function Map() {
 
     // !keyboard movement logic
 
+
+
     useEffect(() => {
         
         const handleMove = (e) => {
+
             
-            // avoiding errors on initial render when current room is null
             if (!currentRoom){
                 return
             } 
             
             const current = formattedRooms[currentRoom.id]
-
-            // console.log(current)
+    
             
             if (e.key === "ArrowRight") {
                 if(current.east.id){
                     setCurrentRoom(formattedRooms[current.east.id])
                 }else{
-                    setCurrentRoom(formattedRooms[current.id])
+                    return
                 }
             }else if (e.key === "ArrowLeft") {
                 if(current.west.id){
                     setCurrentRoom(formattedRooms[current.west.id])
                 }else{
-                    setCurrentRoom(formattedRooms[current.id])
+                    return
                 }
-
+    
             }else if (e.key === "ArrowUp") {
-
+    
                 if(current.south.id){
                     setCurrentRoom(formattedRooms[current.south.id])
                 }else{
-                    setCurrentRoom(formattedRooms[current.id])
+                    return
                 }
-
+    
             }else if (e.key === "ArrowDown") {
-
+    
                 if(current.north.id){
                     setCurrentRoom(formattedRooms[current.north.id])
                 }else{
-                    setCurrentRoom(formattedRooms[current.id])
+                    return
                 }
             }
             
         }
-        
-        window.addEventListener('keydown', e => handleMove(e))
-        
-        return window.removeEventListener('keydown', handleMove)
 
+        window.addEventListener('keyup', handleMove)
+
+        return () => {
+            window.removeEventListener('keyup', handleMove)
+        }
+        
     }, [currentRoom])
 
 
