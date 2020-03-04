@@ -4,20 +4,54 @@ import React, {
 } from 'react';
 
 import {axiosWithAuth} from '../utils/AxiosWithAuth'
+import HashLoader from "react-spinners/HashLoader";
+import { css } from "@emotion/core";
+
+const override = css`
+  position: absolute;
+  top:50%;
+  left: 50%;
+`;
 
 function Map() {
 
-    const [rooms, setRooms] = useState(null)
-
+    const [currentRoom, setCurrentRoom] = useState(null)
+    const [requestErr, setRequestErr] = useState(null)
+    const [loading, setLoading] = useState(false)
+    const [rooms, setRooms] = useState(true)
 
     useEffect(() => {
-
+        // this updates the starting room
+        setLoading(true)
         axiosWithAuth()
         .get('https://ferrari-mud.herokuapp.com/api/adv/init')
-        .then(res => console.log(res))
-        .catch(err => console.log(err))
+        .then(res => {
+            setCurrentRoom(res.data)
+            setLoading(false)
+        })
+        .catch(err => {
+            setLoading(false)
+            setRequestErr(err)
+        })
         
     },[])
+
+    useEffect(() => {
+        // gets all rooms
+        setLoading(true)
+        axiosWithAuth()
+        .get('https://ferrari-mud.herokuapp.com/api/adv/rooms')
+        .then(res => {
+            setRooms(res.data)
+            setLoading(false)
+        })
+        .catch( err => {
+            setLoading(false)
+            setRequestErr(err)
+        })
+    },[])
+
+    console.log(rooms)
 
     const [canvas, setCanvas] = useState();
 
@@ -31,6 +65,8 @@ function Map() {
 
     useEffect(() => {
         window.addEventListener('resize', resizeCanvas)
+
+        // ? cleanup function needed
     })
 
     function resizeCanvas() {
@@ -83,14 +119,22 @@ function Map() {
         //console.log("Drawing at", textPos.x, textPos.y)
         c.fillText("Canvas Test", textPos.x, textPos.y);
 
-        c.fillRect(100, 100, 100, 100)
+        // c.fillRect(100, 100, 100, 100)
 
         requestAnimationFrame(frame);
     }
 
     return ( 
     <div className = "Map">
-        <canvas ref={canvasRef}> </canvas>
+        {
+            loading ?
+            <HashLoader 
+            css={override}
+            size = {80}
+            color = {"#313131"}
+            />
+            : <canvas ref={canvasRef}> </canvas>
+        }
     </div>
     );
 }
