@@ -6,7 +6,7 @@ import axios from 'axios'
 function Control() {
 
     const {user, setUser} = useContext(UserContext)
-const [direction, setDirection] = useState({direction: ''})
+    const [direction, setDirection] = useState({direction: ''})
 
     const movement = (move) => {
         setDirection({direction : move})
