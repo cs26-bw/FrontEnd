@@ -1,13 +1,12 @@
-import React, {
-    useState,
-    useEffect,
-    useContext
-} from 'react';
+
+import React, { useState, useEffect } from 'react';
+
 
 import {axiosWithAuth} from '../utils/AxiosWithAuth'
 import HashLoader from "react-spinners/HashLoader";
 import { css } from "@emotion/core";
 
+import Room from './Room'
 
 const override = css`
   position: absolute;
@@ -15,11 +14,18 @@ const override = css`
   left: 50%;
 `;
 
+let formattedRooms = {}
+
 function Map() {
+
+
+    console.log("Rerendering Map", formattedRooms)
+    
+
     const [currentRoom, setCurrentRoom] = useState(null)
     const [requestErr, setRequestErr] = useState(null)
     const [loading, setLoading] = useState(false)
-    const [rooms, setRooms] = useState(true)
+    const [rooms, setRooms] = useState(null)
 
     useEffect(() => {
         // this updates the starting room
@@ -27,6 +33,8 @@ function Map() {
         axiosWithAuth()
         .get('https://ferrari-mud.herokuapp.com/api/adv/init')
         .then(res => {
+            res.data.id = res.data.room_id
+            delete res.data.room_id
             setCurrentRoom(res.data)
             setLoading(false)
         })
@@ -52,14 +60,14 @@ function Map() {
         })
     },[])
 
-
+    // ! canvas logic starts here
     const [canvas, setCanvas] = useState();
 
     let canvasRef = React.createRef();
+    let canvasContainerRef = React.createRef();
 
     useEffect(() => {
         setCanvas(canvasRef.current);
-        // console.log("Canvas:", canvas)
         resizeCanvas(); //do an initial resize for when it first renders, this function will also be called every time the window is resized too
     }, [canvasRef])
 
@@ -71,8 +79,11 @@ function Map() {
 
     function resizeCanvas() {
         if (canvas) {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            // console.log("setting canvas size to", canvasContainerRef.clientWidth, canvasContainerRef.clientHeight)
+            // console.log(canvasContainerRef)
+            canvas.width = canvasContainerRef.current.clientWidth
+            canvas.height = canvasContainerRef.current.clientHeight
+            frame(0);
         }
     }
 
@@ -86,46 +97,115 @@ function Map() {
 
     let lastTime
 
-    let textPos = {x: 0, y: 0}
-    let textVel = {x: 1, y: 1}
+    useEffect(() => {
+
+        formattedRooms = {}
+
+        if(rooms){
+            rooms.forEach(room => formattedRooms[`${room.id}`] = new Room(
+                room.id, 
+                room.title, 
+                room.description, 
+                room.north, 
+                room.south, 
+                room.east, 
+                room.west, 
+                room.x, 
+                room.y
+                ))
+
+                frame(0)
+        }
+
+        
+    }, [rooms])
 
     if (canvas) {
-        frame(0); //start the frame loop
+        //frame(0); //start the frame loop
     }
 
+    //draw map here
     function frame(currentTime) {
-        //draw map here
+
         let c = canvas.getContext("2d")
 
         setStyles(c)
 
-        c.clearRect(0, 0, window.innerWidth, window.innerHeight);//clear previous frame
+        c.clearRect(0, 0, canvas.width, canvas.height);//clear previous frame
         
         if (!lastTime) lastTime = currentTime;
         let deltaTime = currentTime - lastTime;//time since last frame
         lastTime = currentTime;
-
-        textPos.x += textVel.x * deltaTime/4
-        textPos.y += textVel.y * deltaTime/4
-
-        if(textPos.x > window.innerWidth || textPos.x < 0){
-            textVel.x *= -1
+        
+        c.fillStyle = "black";
+    
+        const roomsLength = Object.keys(formattedRooms).length
+        
+        for (let room in formattedRooms) {
+            formattedRooms[room].draw(c, formattedRooms[currentRoom.id])
         }
 
-        if(textPos.y > window.innerHeight || textPos.y < 0){
-            textVel.y *= -1
-        }
-
-        //console.log("Drawing at", textPos.x, textPos.y)
-        c.fillText("Canvas Test", textPos.x, textPos.y);
-
-        // c.fillRect(100, 100, 100, 100)
-
-        requestAnimationFrame(frame);
+        //requestAnimationFrame(frame);
     }
 
+    // ! canvas logic ends here
+
+    // !keyboard movement logic
+
+    useEffect(() => {
+        
+        const handleMove = (e) => {
+            
+            // avoiding errors on initial render when current room is null
+            if (!currentRoom){
+                return
+            } 
+            
+            const current = formattedRooms[currentRoom.id]
+
+            // console.log(current)
+            
+            if (e.key === "ArrowRight") {
+                if(current.east.id){
+                    setCurrentRoom(formattedRooms[current.east.id])
+                }else{
+                    setCurrentRoom(formattedRooms[current.id])
+                }
+            }else if (e.key === "ArrowLeft") {
+                if(current.west.id){
+                    setCurrentRoom(formattedRooms[current.west.id])
+                }else{
+                    setCurrentRoom(formattedRooms[current.id])
+                }
+
+            }else if (e.key === "ArrowUp") {
+
+                if(current.south.id){
+                    setCurrentRoom(formattedRooms[current.south.id])
+                }else{
+                    setCurrentRoom(formattedRooms[current.id])
+                }
+
+            }else if (e.key === "ArrowDown") {
+
+                if(current.north.id){
+                    setCurrentRoom(formattedRooms[current.north.id])
+                }else{
+                    setCurrentRoom(formattedRooms[current.id])
+                }
+            }
+            
+        }
+        
+        window.addEventListener('keydown', e => handleMove(e))
+        
+        return window.removeEventListener('keydown', handleMove)
+
+    }, [currentRoom])
+
+
     return ( 
-    <div className = "Map">
+    <div ref={canvasContainerRef} className = "Map">
         {
             loading ?
             <HashLoader 
