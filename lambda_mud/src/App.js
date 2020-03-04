@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useState, useReducer } from 'react';
 import { Route, Switch } from 'react-router-dom'
 import './App.scss';
 import 'semantic-ui-css/semantic.min.css'
@@ -9,14 +9,17 @@ import Register from './components/Register'
 import Login from './components/Login'
 import Map from "./game/Map"
 import RoomInfo from './game/RoomInfo'
+import { UserContext } from './contexts/UserContext';
 
 // small change
 
 function App() {
 
+  const [user, setUser] = useState({})
   
   return (
     <div className="App">
+       <UserContext.Provider value={{user, setUser}}>
       <header className="App-header">
         <NavBar/>
         <Switch>
@@ -26,6 +29,7 @@ function App() {
           <Route path='/room' component={RoomInfo} />
         </Switch>
       </header>
+      </UserContext.Provider>
     </div>
   );
 }
