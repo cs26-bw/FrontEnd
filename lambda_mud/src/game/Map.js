@@ -8,7 +8,11 @@ import { css } from "@emotion/core";
 
 import Room from './Room'
 
+import movement from '../assets/movement.mp3'
 import characterOne from '../assets/characterOne.svg'
+import { move } from 'formik';
+import MovementAudio from './SoundMovement';
+
 
 const override = css`
   position: absolute;
@@ -66,6 +70,7 @@ function Map() {
     let canvasRef = React.createRef();
     let canvasContainerRef = React.createRef();
     let characterImgRef = React.createRef();
+    let audioRef = React.createRef();
 
     useEffect(() => {
         setCanvas(canvasRef.current);
@@ -76,12 +81,13 @@ function Map() {
         window.addEventListener('resize', resizeCanvas)
 
         // ? cleanup function needed
+        return () => window.removeEventListener('resize', resizeCanvas)
     })
 
     function resizeCanvas() {
         if (canvas && canvasContainerRef.current) {
-            // console.log("setting canvas size to", canvasContainerRef.clientWidth, canvasContainerRef.clientHeight)
-            // console.log(canvasContainerRef)
+            
+
             canvas.width = canvasContainerRef.current.clientWidth
             canvas.height = canvasContainerRef.current.clientHeight
             frame(0);
@@ -143,7 +149,7 @@ function Map() {
     
         
         for (let room in formattedRooms) {
-            formattedRooms[room].draw(c, formattedRooms[currentRoom.id], characterImgRef)
+            formattedRooms[room].draw(c, formattedRooms[currentRoom.id], characterImgRef, audioRef)
         }
 
         //requestAnimationFrame(frame);
@@ -152,8 +158,6 @@ function Map() {
     // ! canvas logic ends here
 
     // !keyboard movement logic
-
-
 
     useEffect(() => {
         
@@ -221,7 +225,9 @@ function Map() {
                 : <canvas ref={canvasRef}> </canvas>
             }
         </div>
-    
+        <audio ref = {audioRef}>
+            <source src = {movement} type = "audio/mp3"></source>
+        </audio>
         <img ref={characterImgRef} alt="character" className = "character" src={characterOne} style = {{height: "10px", width: "10px"}} />
     </div>
     );

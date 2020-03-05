@@ -13,7 +13,7 @@ class Room{
     }
 
     // draw method
-    draw (c, currentRoom, character, size = null,) {
+    async draw (c, currentRoom, character, audio, size = null,) {
 
 
         //adjust this room's position so that the player's room is always drawn in the center of the screen
@@ -44,10 +44,11 @@ class Room{
         
         
         if(isCurrentRoom) {
-                        
             
+            audio.current.playbackRate = 1.25
             c.drawImage(character.current, adjustedPosition.x - 20, adjustedPosition.y - 25, 40, 50)
-            
+            audio.current.play()
+            // console.log(audio)
             return
 
 
