@@ -1,16 +1,28 @@
 import React from 'react'
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
-import '../styles/nav.scss'
 
 const NavBar = () => {
 
+    const location = useLocation();
+
+    const isPlaying = location.pathname.includes('play') && localStorage.getItem("key")
+
     return (
-        <div>    
+        <div className = 'nav'>    
+            <h1>Py City<span>.</span></h1>
             <nav>
-                <Link to='/'>Home</Link>
-                <Link to='/login'>Login</Link>
-                <Link to='/register'>Register</Link> 
+                {
+                    isPlaying ?
+                    <Link to = '/login' onClick = {() => {
+                        localStorage.removeItem('key');
+                    }}>Logout</Link>
+                    :
+                    <>
+                        <Link to='/login'>Log in</Link>
+                        <Link to='/register'>Register</Link> 
+                    </>
+                }
             </nav> 
         </div>
     )
