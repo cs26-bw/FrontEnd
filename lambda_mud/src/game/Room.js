@@ -1,4 +1,7 @@
-// 
+import Canvg, {
+    presets
+} from 'canvg';
+
 
 class Room{
 
@@ -15,7 +18,7 @@ class Room{
     }
 
     // draw method
-    draw (c, currentRoom, size = null) {
+    async draw (c, currentRoom, character, size = null,) {
 
 
         //adjust this room's position so that the player's room is always drawn in the center of the screen
@@ -46,7 +49,14 @@ class Room{
         
         
         if(isCurrentRoom) {
-            c.fillStyle = "red";
+                        
+            console.log(character.current)
+            
+            c.drawImage(character.current, adjustedPosition.x - 20, adjustedPosition.y - 25, 40, 50)
+            
+            return
+
+
         }else {
             c.fillStyle = "black";
         }
