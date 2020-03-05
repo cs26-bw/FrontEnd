@@ -1,8 +1,3 @@
-import Canvg, {
-    presets
-} from 'canvg';
-
-
 class Room{
 
     constructor(id, title, description, north, south, east, west, x, y){
