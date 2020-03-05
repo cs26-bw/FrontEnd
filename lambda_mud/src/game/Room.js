@@ -44,8 +44,8 @@ class Room{
         
         
         if(isCurrentRoom) {
-            
             audio.current.playbackRate = 1.25
+            audio.current.volume = .15
             c.drawImage(character.current, adjustedPosition.x - 20, adjustedPosition.y - 25, 40, 50)
             audio.current.play()
             return

@@ -11,7 +11,7 @@ import Room from './Room'
 import movement from '../assets/movement.mp3'
 import characterOne from '../assets/characterOne.svg'
 import { move } from 'formik';
-import MovementAudio from './SoundMovement';
+import BGMusic from './BackgroundMusic';
 
 
 const override = css`
@@ -124,6 +124,7 @@ function Map() {
                 frame(0)
         }
 
+        console.log(formattedRooms);
         
     }, [rooms])
 
@@ -226,6 +227,7 @@ function Map() {
             }
         </div>
         <audio ref = {audioRef}>
+        <BGMusic />
             <source src = {movement} type = "audio/mp3"></source>
         </audio>
         <img ref={characterImgRef} alt="character" className = "character" src={characterOne} style = {{height: "10px", width: "10px"}} />
