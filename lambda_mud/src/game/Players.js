@@ -13,7 +13,7 @@ function Players() {
             
                 {
                     players.map((player) => {
-                        return <div className='players'><h3><span>{player}</span></h3></div>  
+                        return <div key={player}className='players'><h3><span>{player}</span></h3></div>  
                     })
                 }
             
