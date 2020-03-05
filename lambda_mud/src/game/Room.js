@@ -13,7 +13,7 @@ class Room{
     }
 
     // draw method
-    async draw (c, currentRoom, character, size = null,) {
+    draw (c, currentRoom, character, size = null,) {
 
 
         //adjust this room's position so that the player's room is always drawn in the center of the screen
@@ -45,7 +45,6 @@ class Room{
         
         if(isCurrentRoom) {
                         
-            console.log(character.current)
             
             c.drawImage(character.current, adjustedPosition.x - 20, adjustedPosition.y - 25, 40, 50)
             
