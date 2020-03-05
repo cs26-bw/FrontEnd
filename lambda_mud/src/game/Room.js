@@ -1,5 +1,3 @@
-// 
-
 class Room{
 
     constructor(id, title, description, north, south, east, west, x, y){
@@ -15,7 +13,7 @@ class Room{
     }
 
     // draw method
-    draw (c, currentRoom, size = null) {
+    draw (c, currentRoom, character, size = null,) {
 
 
         //adjust this room's position so that the player's room is always drawn in the center of the screen
@@ -46,7 +44,13 @@ class Room{
         
         
         if(isCurrentRoom) {
-            c.fillStyle = "red";
+                        
+            
+            c.drawImage(character.current, adjustedPosition.x - 20, adjustedPosition.y - 25, 40, 50)
+            
+            return
+
+
         }else {
             c.fillStyle = "black";
         }

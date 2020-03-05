@@ -8,6 +8,8 @@ import { css } from "@emotion/core";
 
 import Room from './Room'
 
+import characterOne from '../assets/characterOne.svg'
+
 const override = css`
   position: absolute;
   top:50%;
@@ -18,8 +20,6 @@ let formattedRooms = {}
 
 function Map() {
 
-
-    console.log("Rerendering Map", formattedRooms)
     
 
     const [currentRoom, setCurrentRoom] = useState(null)
@@ -65,6 +65,7 @@ function Map() {
 
     let canvasRef = React.createRef();
     let canvasContainerRef = React.createRef();
+    let characterImgRef = React.createRef();
 
     useEffect(() => {
         setCanvas(canvasRef.current);
@@ -78,7 +79,7 @@ function Map() {
     })
 
     function resizeCanvas() {
-        if (canvas) {
+        if (canvas && canvasContainerRef.current) {
             // console.log("setting canvas size to", canvasContainerRef.clientWidth, canvasContainerRef.clientHeight)
             // console.log(canvasContainerRef)
             canvas.width = canvasContainerRef.current.clientWidth
@@ -127,6 +128,7 @@ function Map() {
     //draw map here
     function frame(currentTime) {
 
+
         let c = canvas.getContext("2d")
 
         setStyles(c)
@@ -139,10 +141,9 @@ function Map() {
         
         c.fillStyle = "black";
     
-        const roomsLength = Object.keys(formattedRooms).length
         
         for (let room in formattedRooms) {
-            formattedRooms[room].draw(c, formattedRooms[currentRoom.id])
+            formattedRooms[room].draw(c, formattedRooms[currentRoom.id], characterImgRef)
         }
 
         //requestAnimationFrame(frame);
@@ -152,69 +153,76 @@ function Map() {
 
     // !keyboard movement logic
 
+
+
     useEffect(() => {
         
         const handleMove = (e) => {
+
             
-            // avoiding errors on initial render when current room is null
             if (!currentRoom){
                 return
             } 
             
             const current = formattedRooms[currentRoom.id]
-
-            // console.log(current)
+    
             
             if (e.key === "ArrowRight") {
                 if(current.east.id){
                     setCurrentRoom(formattedRooms[current.east.id])
                 }else{
-                    setCurrentRoom(formattedRooms[current.id])
+                    return
                 }
             }else if (e.key === "ArrowLeft") {
                 if(current.west.id){
                     setCurrentRoom(formattedRooms[current.west.id])
                 }else{
-                    setCurrentRoom(formattedRooms[current.id])
+                    return
                 }
-
+    
             }else if (e.key === "ArrowUp") {
-
+    
                 if(current.south.id){
                     setCurrentRoom(formattedRooms[current.south.id])
                 }else{
-                    setCurrentRoom(formattedRooms[current.id])
+                    return
                 }
-
+    
             }else if (e.key === "ArrowDown") {
-
+    
                 if(current.north.id){
                     setCurrentRoom(formattedRooms[current.north.id])
                 }else{
-                    setCurrentRoom(formattedRooms[current.id])
+                    return
                 }
             }
             
         }
-        
-        window.addEventListener('keydown', e => handleMove(e))
-        
-        return window.removeEventListener('keydown', handleMove)
 
+        window.addEventListener('keyup', handleMove)
+
+        return () => {
+            window.removeEventListener('keyup', handleMove)
+        }
+        
     }, [currentRoom])
 
 
     return ( 
-    <div ref={canvasContainerRef} className = "Map">
-        {
-            loading ?
-            <HashLoader 
-            css={override}
-            size = {80}
-            color = {"#313131"}
-            />
-            : <canvas ref={canvasRef}> </canvas>
-        }
+    <div>
+        <div ref={canvasContainerRef} className = "Map">
+            {
+                loading ?
+                <HashLoader 
+                css={override}
+                size = {80}
+                color = {"#313131"}
+                />
+                : <canvas ref={canvasRef}> </canvas>
+            }
+        </div>
+    
+        <img ref={characterImgRef} alt="character" className = "character" src={characterOne} style = {{height: "10px", width: "10px"}} />
     </div>
     );
 }
