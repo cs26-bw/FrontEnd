@@ -28,12 +28,16 @@ function Control() {
 
 
     return (
-        <div>
-            <h3>{user.error_msg}</h3>
-        <button onClick={(_ => movement('n'))} >N</button>
-        <button onClick={(_ => movement('s'))} >S</button>
-        <button onClick={(_ => movement('e'))} >E</button>
-        <button onClick={(_ => movement('w'))} >W</button>
+        <div className='btn-container'>
+            <p>PYCITY CONTROLLER</p>
+            {/* <h3>{user.error_msg}</h3> */}
+            {/* error message removed due to bug */}
+        <button onClick={(_ => movement('n'))}>N</button>
+        <div className='btn-middle'>
+        <button onClick={(_ => movement('w'))}>W</button>
+        <button onClick={(_ => movement('e'))}>E</button>
+        </div>
+        <button onClick={(_ => movement('s'))}>S</button>
         </div>
     )
 }

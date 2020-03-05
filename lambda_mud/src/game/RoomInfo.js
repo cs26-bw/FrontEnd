@@ -5,6 +5,8 @@ import { PlayersContext } from '../contexts/PlayersContext'
 import Control from './Control'
 import Players from './Players'
 
+import '../styles/game.scss'
+
 
 function RoomInfo() {
 
@@ -31,12 +33,16 @@ function RoomInfo() {
 
     return (
         <div>
-            <h1>User: {user.name}</h1>
-            <h3>Room: {user.title}</h3>
-            <h3>Description: {user.description}</h3>
-            <h3>Room Id: {user.room_id}</h3>
+        <div className='roominfo-container'>
+            <h3>User: <span>{user.name}</span></h3>
+            <h3>Room: <span>{user.title}</span></h3>
+            <h3>Description: <span>{user.description}</span></h3>
+            <h3>Room Id: <span>{user.room_id}</span></h3>
+        </div>
+        <div>
             <Control />
             <Players />
+        </div>
         </div>
     )
 }

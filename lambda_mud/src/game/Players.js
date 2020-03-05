@@ -8,12 +8,15 @@ function Players() {
     
 
     return (
-        <div>
-            {
-                players.map((player) => {
-                    return <h3>{player}</h3>
-                })
-            }
+        <div className='players-container'>
+            <h3>Players In Room:</h3>
+            
+                {
+                    players.map((player) => {
+                        return <div className='players'><h3><span>{player}</span></h3></div>  
+                    })
+                }
+            
         </div>
     )
 }
