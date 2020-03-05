@@ -13,7 +13,7 @@ function RoomInfo() {
     const [loading, setLoading] = useState(false)
     const {user, setUser} = useContext(UserContext)
     const {players, setPlayers} = useContext(PlayersContext)
-    console.log(players)
+
     
 
     useEffect(() => {
@@ -31,6 +31,8 @@ function RoomInfo() {
         
     },[])
 
+    console.log(user,'user in roominfo')
+
     return (
         <div>
         <div className='roominfo-container'>
@@ -38,6 +40,7 @@ function RoomInfo() {
             <h3>Room: <span>{user.title}</span></h3>
             <h3>Description: <span>{user.description}</span></h3>
             <h3>Room Id: <span>{user.room_id}</span></h3>
+            <h3><span>{user.error_msg}</span></h3>
         </div>
         <div>
             <Control />
