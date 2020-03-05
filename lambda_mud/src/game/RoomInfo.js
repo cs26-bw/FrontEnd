@@ -2,13 +2,14 @@ import React, {useEffect, useState, useContext} from 'react'
 import {axiosWithAuth} from '../utils/AxiosWithAuth'
 import {UserContext} from "../contexts/UserContext"
 import Control from './Control'
+import { PlayersContext } from '../contexts/PlayersContext'
 
 function RoomInfo() {
 
     const [loading, setLoading] = useState(false)
     const {user, setUser} = useContext(UserContext)
-    const [players, setPlayers] = useState()
-    
+    const {players, setPlayers} = useContext(PlayersContext)
+    console.log(players)
     
 
     useEffect(() => {
