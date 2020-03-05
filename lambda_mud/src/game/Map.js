@@ -2,9 +2,10 @@
 import React, { useState, useEffect } from 'react';
 
 
-import {axiosWithAuth} from '../utils/AxiosWithAuth'
+import { axiosWithAuth } from '../utils/AxiosWithAuth'
 import HashLoader from "react-spinners/HashLoader";
 import { css } from "@emotion/core";
+import GameLoop from "./GameLoop"
 
 import Room from './Room'
 
@@ -18,9 +19,10 @@ const override = css`
 
 let formattedRooms = {}
 
-function Map() {
+let gameLoop;//need to declare outside of Map() cause otherwise we'll lose reference to it and it will keep looping forever, never being garbage collected
+let characterImgRef = React.createRef();
 
-    
+function Map() {
 
     const [currentRoom, setCurrentRoom] = useState(null)
     const [requestErr, setRequestErr] = useState(null)
@@ -31,41 +33,50 @@ function Map() {
         // this updates the starting room
         setLoading(true)
         axiosWithAuth()
-        .get('https://ferrari-mud.herokuapp.com/api/adv/init')
-        .then(res => {
-            res.data.id = res.data.room_id
-            delete res.data.room_id
-            setCurrentRoom(res.data)
-            setLoading(false)
-        })
-        .catch(err => {
-            setLoading(false)
-            setRequestErr(err)
-        })
-        
-    },[])
+            .get('https://ferrari-mud.herokuapp.com/api/adv/init')
+            .then(res => {
+                res.data.id = res.data.room_id
+                delete res.data.room_id
+                setCurrentRoom(res.data)
+                setLoading(false)
+            })
+            .catch(err => {
+                setLoading(false)
+                setRequestErr(err)
+            })
+
+    }, [])
 
     useEffect(() => {
         // gets all rooms
         setLoading(true)
         axiosWithAuth()
-        .get('https://ferrari-mud.herokuapp.com/api/adv/rooms')
-        .then(res => {
-            setRooms(res.data)
-            setLoading(false)
-        })
-        .catch( err => {
-            setLoading(false)
-            setRequestErr(err)
-        })
-    },[])
+            .get('https://ferrari-mud.herokuapp.com/api/adv/rooms')
+            .then(res => {
+                setRooms(res.data)
+                setLoading(false)
+            })
+            .catch(err => {
+                setLoading(false)
+                setRequestErr(err)
+            })
+    }, [])
+
+    useEffect(() => {
+        // prevent the page from scolling while pressing the arrow keys
+        window.addEventListener("keydown", function (e) {
+            // space and arrow keys
+            if ([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+                e.preventDefault();
+            }
+        }, false);
+    }, [])
 
     // ! canvas logic starts here
     const [canvas, setCanvas] = useState();
 
     let canvasRef = React.createRef();
     let canvasContainerRef = React.createRef();
-    let characterImgRef = React.createRef();
 
     useEffect(() => {
         setCanvas(canvasRef.current);
@@ -84,146 +95,131 @@ function Map() {
             // console.log(canvasContainerRef)
             canvas.width = canvasContainerRef.current.clientWidth
             canvas.height = canvasContainerRef.current.clientHeight
-            frame(0);
+            //frame(0);
         }
     }
-
-    function setStyles(c) {
-        c.font = '35px ' + 'Open Sans';
-        c.globalAlpha = 1;
-        c.lineWidth = 2;
-        c.textBaseline = 'middle';
-        c.textAlign = 'center';
-    }
-
-    let lastTime
 
     useEffect(() => {
 
         formattedRooms = {}
 
-        if(rooms){
+        if (rooms) {
             rooms.forEach(room => formattedRooms[`${room.id}`] = new Room(
-                room.id, 
-                room.title, 
-                room.description, 
-                room.north, 
-                room.south, 
-                room.east, 
-                room.west, 
-                room.x, 
+                room.id,
+                room.title,
+                room.description,
+                room.north,
+                room.south,
+                room.east,
+                room.west,
+                room.x,
                 room.y
-                ))
-
-                frame(0)
+            ))
         }
 
-        
+
     }, [rooms])
 
-    if (canvas) {
-        //frame(0); //start the frame loop
-    }
+    let frameCounter = 0
 
-    //draw map here
-    function frame(currentTime) {
-
-
-        let c = canvas.getContext("2d")
-
-        setStyles(c)
-
-        c.clearRect(0, 0, canvas.width, canvas.height);//clear previous frame
-        
-        if (!lastTime) lastTime = currentTime;
-        let deltaTime = currentTime - lastTime;//time since last frame
-        lastTime = currentTime;
-        
-        c.fillStyle = "black";
-    
-        
-        for (let room in formattedRooms) {
-            formattedRooms[room].draw(c, formattedRooms[currentRoom.id], characterImgRef)
+    //once we have all the state needed, start/restart the game loop
+    useEffect(() => {
+        if (canvas && currentRoom && rooms) {
+            if (!gameLoop) {
+                gameLoop = new GameLoop(formattedRooms, currentRoom, canvas, characterImgRef);
+                gameLoop.startLoop(); //start the frame loop
+            }
+            //  else {
+            //     gameLoop.stopLoop();
+            //     gameLoop = new GameLoop(formattedRooms, currentRoom, canvas, characterImgRef);
+            //     gameLoop.startLoop();
+            // }
         }
+    }, [rooms, canvas, currentRoom])
 
-        //requestAnimationFrame(frame);
-    }
+    // useEffect(() => {
+    //     if(gameLoop) gameLoop.movePlayer(currentRoom);
+    // }, [currentRoom])
+
 
     // ! canvas logic ends here
 
     // !keyboard movement logic
 
-
-
     useEffect(() => {
-        
+
         const handleMove = (e) => {
 
-            
-            if (!currentRoom){
+            if (!currentRoom) {
                 return
-            } 
-            
+            }
+
             const current = formattedRooms[currentRoom.id]
-    
-            
+
+
             if (e.key === "ArrowRight") {
-                if(current.east.id){
+                if (current.east.id) {
                     setCurrentRoom(formattedRooms[current.east.id])
-                }else{
+                    if(gameLoop) gameLoop.movePlayer(formattedRooms[current.east.id])
+                } else {
                     return
                 }
-            }else if (e.key === "ArrowLeft") {
-                if(current.west.id){
+            } else if (e.key === "ArrowLeft") {
+                if (current.west.id) {
                     setCurrentRoom(formattedRooms[current.west.id])
-                }else{
+                    if(gameLoop) gameLoop.movePlayer(formattedRooms[current.west.id])
+                } else {
                     return
                 }
-    
-            }else if (e.key === "ArrowUp") {
-    
-                if(current.south.id){
+
+            } else if (e.key === "ArrowUp") {
+
+                if (current.south.id) {
                     setCurrentRoom(formattedRooms[current.south.id])
-                }else{
+                    if(gameLoop) gameLoop.movePlayer(formattedRooms[current.south.id])
+                } else {
                     return
                 }
-    
-            }else if (e.key === "ArrowDown") {
-    
-                if(current.north.id){
+
+            } else if (e.key === "ArrowDown") {
+
+                if (current.north.id) {
                     setCurrentRoom(formattedRooms[current.north.id])
-                }else{
+                    if(gameLoop) gameLoop.movePlayer(formattedRooms[current.north.id])
+                } else {
                     return
                 }
             }
-            
+
         }
 
-        window.addEventListener('keyup', handleMove)
+        console.log("new current room! + ", currentRoom)
+
+        window.addEventListener('keydown', handleMove)
 
         return () => {
-            window.removeEventListener('keyup', handleMove)
+            window.removeEventListener('keydown', handleMove)
         }
-        
+
     }, [currentRoom])
 
 
-    return ( 
-    <div>
-        <div ref={canvasContainerRef} className = "Map">
-            {
-                loading ?
-                <HashLoader 
-                css={override}
-                size = {80}
-                color = {"#313131"}
-                />
-                : <canvas ref={canvasRef}> </canvas>
-            }
+    return (
+        <div>
+            <div ref={canvasContainerRef} className="Map">
+                {
+                    loading ?
+                        <HashLoader
+                            css={override}
+                            size={80}
+                            color={"#313131"}
+                        />
+                        : <canvas ref={canvasRef}> </canvas>
+                }
+            </div>
+
+            <img ref={characterImgRef} alt="character" className="character" src={characterOne} style={{ display: "None", height: "10px", width: "10px" }} />
         </div>
-    
-        <img ref={characterImgRef} alt="character" className = "character" src={characterOne} style = {{height: "10px", width: "10px"}} />
-    </div>
     );
 }
 
