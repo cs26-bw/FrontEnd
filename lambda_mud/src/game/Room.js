@@ -46,7 +46,7 @@ class Room{
         if(isCurrentRoom) {
             console.log('movement', audio.current)
             audio.current.playbackRate = 1.45
-            audio.current.volume = .1
+            audio.current.volume = .15
             audio.current.play()
             c.drawImage(character.current, adjustedPosition.x - 20, adjustedPosition.y - 25, 40, 50)
             return
