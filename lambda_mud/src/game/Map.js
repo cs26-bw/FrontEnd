@@ -124,7 +124,6 @@ function Map() {
                 frame(0)
         }
 
-        console.log(formattedRooms);
         
     }, [rooms])
 
@@ -214,8 +213,8 @@ function Map() {
 
 
     return ( 
-    <div>
-        <div ref={canvasContainerRef} className = "Map">
+    <div style = {{position: "relative"}}>
+        <div ref={canvasContainerRef} className = "Map" >
             {
                 loading ?
                 <HashLoader 
@@ -226,8 +225,8 @@ function Map() {
                 : <canvas ref={canvasRef}> </canvas>
             }
         </div>
-        <audio ref = {audioRef}>
         <BGMusic />
+        <audio ref = {audioRef}>
             <source src = {movement} type = "audio/mp3"></source>
         </audio>
         <img ref={characterImgRef} alt="character" className = "character" src={characterOne} style = {{height: "10px", width: "10px"}} />

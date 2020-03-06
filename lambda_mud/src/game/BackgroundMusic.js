@@ -1,4 +1,13 @@
 import React, {useState, useEffect} from 'react' 
+import backgroundMusic from '../assets/backgroundMusic.ogg'
+import { Icon } from 'semantic-ui-react'
+
+const buttonStyles = {
+    position: "absolute",
+    top: "2rem",
+    right:"2rem",
+    color: "#ca3e47"
+}
 
 const BGMusic = (props) => {
 
@@ -8,17 +17,35 @@ const BGMusic = (props) => {
 
     useEffect(() => {
         
-        console.log(music)
-    }, [music])
+        if (music && !mutedBG){
+
+            music.current.volume = .1
+            music.current.play();
+
+        }else if(music && mutedBG){
+
+            music.current.pause();
+
+        }
+
+    }, [mutedBG])
 
     return (
         
         <div>
-        
-            <audio ref = {(el) => music = el}>
-                <source src = '../assets/backgroundMusic.ogg'>
-                </source>
+
+            <Icon
+            name = {mutedBG ? "music" : "mute"}
+            size = "big"
+            circular ={true}
+            onClick = {() => setMutedBG(!mutedBG)}
+            style = {buttonStyles}
+            />
+
+            <audio ref = {music} >
+                <source src ={backgroundMusic}  type = "audio/ogg" />
             </audio>
+
         </div>
     )
 
