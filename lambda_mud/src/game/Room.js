@@ -27,8 +27,8 @@ class Room {
         this.y = y;
     }
 
-    // draw method
     draw(c, currentRoom, playerPos, character, deltaTime, size = null) {
+    //async draw (c, currentRoom, character, audio, size = null,) {
 
         if (!isNaN(deltaTime)) this.timeSinceStart += deltaTime;
 
@@ -98,6 +98,18 @@ class Room {
         if (this.west.title) {
             c.beginPath();
             c.fillRect(adjustedPosition.x, adjustedPosition.y - 2.5, -this.connectionLength, 5);
+        }
+        
+        if(isCurrentRoom) {
+            audio.current.playbackRate = 1.45
+            audio.current.volume = .15
+            audio.current.play()
+            c.drawImage(character.current, adjustedPosition.x - 20, adjustedPosition.y - 25, 40, 50)
+            return
+
+
+        }else {
+            c.fillStyle = "black";
         }
 
         if (isCurrentRoom) {
