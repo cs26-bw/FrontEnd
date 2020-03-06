@@ -2,7 +2,7 @@ import React, { useState, useReducer } from 'react';
 import { Route, Switch } from 'react-router-dom'
 import './App.scss';
 import 'semantic-ui-css/semantic.min.css'
-
+import Dashboard from './components/Dashboard'
 import NavBar from './components/Nav'
 import Footer from './components/Footer'
 import Register from './components/Register'
@@ -31,6 +31,7 @@ function App() {
        <PlayersContext.Provider value={{players, setPlayers}}>
        <NavBar/>
         <Switch>
+          <Route exact path='/' component={Dashboard} />
           <Route path='/register' component={Register} />
           <Route path='/login' component = {Login} />
           <Route path='/play' exact component={Master} />

@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link, useLocation } from "react-router-dom";
+import BGMusic from '../game/BackgroundMusic.js';
 
 
 const NavBar = () => {
@@ -11,12 +12,15 @@ const NavBar = () => {
     return (
         <div className = 'nav'>    
             <h1>Py City<span>.</span></h1>
-            <nav>
+            <nav style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
                 {
                     isPlaying ?
-                    <Link to = '/login' onClick = {() => {
-                        localStorage.removeItem('key');
-                    }}>Logout</Link>
+                    <>
+                        <Link to = '/login' onClick = {() => {
+                            localStorage.removeItem('key');
+                        }}>Logout</Link>
+                        <BGMusic />
+                    </>
                     :
                     <>
                         <Link to='/login'>Log in</Link>

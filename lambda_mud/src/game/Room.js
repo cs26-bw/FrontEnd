@@ -36,14 +36,11 @@ class Room {
 
         if (this.startAnimationPlaying) {
 
-            //console.log(( 9.81 * Math.pow(deltaTime, 2) ) / 10000)
             //this.animationYVelocity = this.animationYVelocity - 1;
             if (!isNaN(deltaTime)) {
                 this.animationYVelocity = this.animationYVelocity + ((9.81 * Math.pow(deltaTime, 2)) / 10000); //add gravity to velocity
-                //console.log(this.animationYVelocity)
                 this.animationYPosition += this.animationYVelocity * deltaTime / 6;
             }
-            //console.log(this.animationYPosition)
 
             if (this.animationYPosition >= adjustedPosition.y) {
                 if (this.bounceCounter <= this.bounceLimit) {

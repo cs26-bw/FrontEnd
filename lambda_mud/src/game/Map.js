@@ -9,10 +9,10 @@ import GameLoop from "./GameLoop"
 
 import Room from './Room'
 
-import movement from '../assets/movement.mp3'
+import * as movementSound from '../assets/movement.mp3'
+
 import characterOne from '../assets/characterOne.svg'
 import { move } from 'formik';
-import BGMusic from './BackgroundMusic';
 import {UserContext} from "../contexts/UserContext"
 import { PlayersContext } from '../contexts/PlayersContext'
 
@@ -32,12 +32,12 @@ let audioRef = React.createRef();
 let canMove = true;
 
 function Map() {
-
+    
     const [currentRoom, setCurrentRoom] = useState(null)
     const [requestErr, setRequestErr] = useState(null)
     const [loading, setLoading] = useState(false)
     const [rooms, setRooms] = useState(null)
-
+    
     const {user, setUser} = useContext(UserContext)
     const {players, setPlayers} = useContext(PlayersContext)
 
@@ -126,7 +126,6 @@ function Map() {
     function resizeCanvas() {
         if (canvas && canvasContainerRef.current) {
             
-            console.log(canvasContainerRef)
             canvas.width = canvasContainerRef.current.clientWidth
             canvas.height = canvasContainerRef.current.clientHeight
             //frame(0);
@@ -187,13 +186,6 @@ function Map() {
 
     // !keyboard movement logic
 
-    const playSound = () => {
-        audioRef.current.currentTime = 0;
-        audioRef.current.playbackRate = 1.45
-        audioRef.current.volume = .15
-        audioRef.current.play()
-    }
-
     useEffect(() => {
 
         const handleMove = (e) => {
@@ -207,18 +199,18 @@ function Map() {
         if(canMove) {
             if (e.key === "ArrowRight") {
                 if (current.east.id) {
+                    
                     setCurrentRoom(formattedRooms[current.east.id])
                     movement("e")
-                    playSound()
                     if(gameLoop) gameLoop.movePlayer(formattedRooms[current.east.id])
                 } else {
                     return
                 }
             } else if (e.key === "ArrowLeft") {
                 if (current.west.id) {
+                    
                     setCurrentRoom(formattedRooms[current.west.id])
                     movement("w")
-                    playSound()
                     if(gameLoop) gameLoop.movePlayer(formattedRooms[current.west.id])
                 } else {
                     return
@@ -227,9 +219,9 @@ function Map() {
             } else if (e.key === "ArrowUp") {
 
                 if (current.north.id) {
+                    
                     movement("n")
                     setCurrentRoom(formattedRooms[current.north.id])
-                    playSound()
                     if(gameLoop) gameLoop.movePlayer(formattedRooms[current.north.id])
                 } else {
                     return
@@ -238,9 +230,9 @@ function Map() {
             } else if (e.key === "ArrowDown") {
 
                 if (current.south.id) {
+                    
                     movement("s")
                     setCurrentRoom(formattedRooms[current.south.id])
-                    playSound()
                     if(gameLoop) gameLoop.movePlayer(formattedRooms[current.south.id])
                 } else {
                     return
@@ -250,7 +242,6 @@ function Map() {
 
         }
 
-        console.log("new current room! + ", currentRoom)
 
         window.addEventListener('keydown', handleMove)
 
@@ -259,6 +250,15 @@ function Map() {
         }
 
     }, [currentRoom])
+
+    useEffect(() => {
+        if(audioRef){
+            audioRef.current.currentTime = 0;
+            audioRef.current.playbackRate = 1.45
+            audioRef.current.volume = .15
+            audioRef.current.play()
+        }
+    },[currentRoom])
 
     return ( 
     <div className = 'map-container'>
@@ -274,7 +274,7 @@ function Map() {
             }
         </div>
         <audio ref = {audioRef}>
-            <source src = {movement} type = "audio/mp3"></source>
+            <source src = {movementSound} type = "audio/mp3"></source>
         </audio>
         <img ref={characterImgRef} alt="character" className = "character" src={characterOne} style = {{display: "None", height: "10px", width: "10px"}} />
     </div>

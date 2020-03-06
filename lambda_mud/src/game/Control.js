@@ -30,7 +30,7 @@ function Control() {
 
     return (
         <div className='btn-container'>
-            <p>PYCITY CONTROLLER</p>
+            <p>Remote</p>
             
         <button onClick={(_ => movement("n"))}>N</button>
         <div className="btn-middle">
