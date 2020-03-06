@@ -6,15 +6,17 @@ footer{
     color: #ffffff;
     margin: auto 0;
     vertical-align: middle;
-    .footer-text{
-        text-align: center;
-        border: 1px solid red;
-        height: 50%;
-        // width: auto;
-        // margin: auto 0;
-        span{
-            font-weight: bold;
-            color:$red;
+    .footer-container{
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        .footer-text{
+            span{
+                font-weight: bold;
+                color:$red;
+            }
         }
     }
 }

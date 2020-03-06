@@ -273,7 +273,6 @@ function Map() {
                 : <canvas ref={canvasRef}> </canvas>
             }
         </div>
-        <BGMusic />
         <audio ref = {audioRef}>
             <source src = {movement} type = "audio/mp3"></source>
         </audio>
