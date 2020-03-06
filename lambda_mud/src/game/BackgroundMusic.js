@@ -6,7 +6,8 @@ const buttonStyles = {
     position: "absolute",
     top: "2rem",
     right:"2rem",
-    color: "#ca3e47"
+    color: "#ca3e47",
+    cursor: "pointer"
 }
 
 const BGMusic = (props) => {
@@ -35,7 +36,7 @@ const BGMusic = (props) => {
         <div>
 
             <Icon
-            name = {mutedBG ? "music" : "mute"}
+            name = {mutedBG ? "volume off" : "volume up"}
             size = "big"
             circular ={true}
             onClick = {() => setMutedBG(!mutedBG)}
