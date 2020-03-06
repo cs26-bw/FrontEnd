@@ -5,7 +5,9 @@ const Footer = () => {
 
     return (
         <footer>
-            <p>&copy; {new Date().getFullYear()} <span>Py City</span></p>
+            <div className='footer-container'>
+            <p className = 'footer-text'>&copy; {new Date().getFullYear()} <span>Py City</span></p>
+            </div>
         </footer>
     )
 }

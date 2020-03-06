@@ -31,20 +31,15 @@ function RoomInfo() {
         
     },[])
 
-    console.log(user,'user in roominfo')
 
     return (
-        <div>
+        <div className = 'room-info-parent'>
         <div className='roominfo-container'>
             <h3>User: <span>{user.name}</span></h3>
             <h3>Room: <span>{user.title}</span></h3>
             <h3>Description: <span>{user.description}</span></h3>
             <h3>Room Id: <span>{user.room_id}</span></h3>
             <h3><span>{user.error_msg}</span></h3>
-        </div>
-        <div>
-            <Control />
-            <Players />
         </div>
         </div>
     )

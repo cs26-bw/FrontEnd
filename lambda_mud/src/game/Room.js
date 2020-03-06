@@ -32,7 +32,7 @@ class Room {
         if (!isNaN(deltaTime)) this.timeSinceStart += deltaTime;
 
         //adjust this room's position so that the player's room is always drawn in the center of the screen
-        let adjustedPosition = { x: ((this.x - playerPos.x) * 100) + (window.innerWidth / 2), y: ((this.y - playerPos.y) * 100) + (window.innerHeight / 2) }
+        let adjustedPosition = { x: ((this.x - playerPos.x) * 100) + (window.innerWidth / 2), y: ((this.y - playerPos.y) * -100) + (window.innerHeight / 2) }
 
         if (this.startAnimationPlaying) {
 
@@ -82,7 +82,7 @@ class Room {
 
         if (this.north.title) {
             c.beginPath();
-            c.fillRect(adjustedPosition.x - 2.5, adjustedPosition.y, 5, this.connectionLength);
+            c.fillRect(adjustedPosition.x - 2.5, adjustedPosition.y, 5, -this.connectionLength);
         }
         if (this.east.title) {
             c.beginPath();
@@ -91,7 +91,7 @@ class Room {
 
         if (this.south.title) {
             c.beginPath();
-            c.fillRect(adjustedPosition.x - 2.5, adjustedPosition.y, 5, -this.connectionLength);
+            c.fillRect(adjustedPosition.x - 2.5, adjustedPosition.y, 5, this.connectionLength);
         }
 
         if (this.west.title) {

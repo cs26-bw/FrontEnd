@@ -5,8 +5,8 @@ import { Icon } from 'semantic-ui-react'
 const buttonStyles = {
     position: "absolute",
     top: "2rem",
-    right:"2rem",
-    color: "#ca3e47",
+    right:"3rem",
+    color: "#ffffff",
     cursor: "pointer"
 }
 
@@ -39,7 +39,7 @@ const BGMusic = (props) => {
             <Icon
             name = {mutedBG ? "volume off" : "volume up"}
             size = "big"
-            circular ={true}
+            
             onClick = {() => setMutedBG(!mutedBG)}
             style = {buttonStyles}
             />

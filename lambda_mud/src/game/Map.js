@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 
 import { axiosWithAuth } from '../utils/AxiosWithAuth'
@@ -13,6 +13,8 @@ import movement from '../assets/movement.mp3'
 import characterOne from '../assets/characterOne.svg'
 import { move } from 'formik';
 import BGMusic from './BackgroundMusic';
+import {UserContext} from "../contexts/UserContext"
+import { PlayersContext } from '../contexts/PlayersContext'
 
 
 const override = css`
@@ -27,12 +29,38 @@ let gameLoop;//need to declare outside of Map() cause otherwise we'll lose refer
 let characterImgRef = React.createRef();
 let audioRef = React.createRef();
 
+let canMove = true;
+
 function Map() {
 
     const [currentRoom, setCurrentRoom] = useState(null)
     const [requestErr, setRequestErr] = useState(null)
     const [loading, setLoading] = useState(false)
     const [rooms, setRooms] = useState(null)
+
+    const {user, setUser} = useContext(UserContext)
+    const {players, setPlayers} = useContext(PlayersContext)
+
+    const handlePost = (compass) => {
+        
+        axiosWithAuth()
+        .post('https://ferrari-mud.herokuapp.com/api/adv/move', {direction: compass})
+        .then(res => {
+            setUser({...user, name: res.data.name, title: res.data.title, description: res.data.description, room_id: res.data.room_id, error_msg: res.data.error_msg})
+            setPlayers(res.data.players)
+            canMove = true;
+        })
+        .catch(err => {
+            console.log(err)
+            canMove = true;
+        })
+    }
+
+    const movement = async (move) => {
+        canMove = false;
+        let post = await handlePost(move)
+        return post;
+    }
 
     useEffect(() => {
         // this updates the starting room
@@ -98,7 +126,7 @@ function Map() {
     function resizeCanvas() {
         if (canvas && canvasContainerRef.current) {
             
-
+            console.log(canvasContainerRef)
             canvas.width = canvasContainerRef.current.clientWidth
             canvas.height = canvasContainerRef.current.clientHeight
             //frame(0);
@@ -125,8 +153,15 @@ function Map() {
 
 
     }, [rooms])
+    
+    useEffect(() => {
 
-    let frameCounter = 0
+        if(gameLoop) gameLoop.movePlayer(formattedRooms[user.room_id])
+        if(formattedRooms[user.room_id]) {
+            setCurrentRoom(formattedRooms[user.room_id]);
+        }
+
+    }, [user])
 
     //once we have all the state needed, start/restart the game loop
     useEffect(() => {
@@ -153,6 +188,7 @@ function Map() {
     // !keyboard movement logic
 
     const playSound = () => {
+        audioRef.current.currentTime = 0;
         audioRef.current.playbackRate = 1.45
         audioRef.current.volume = .15
         audioRef.current.play()
@@ -168,10 +204,11 @@ function Map() {
 
             const current = formattedRooms[currentRoom.id]
 
-
+        if(canMove) {
             if (e.key === "ArrowRight") {
                 if (current.east.id) {
                     setCurrentRoom(formattedRooms[current.east.id])
+                    movement("e")
                     playSound()
                     if(gameLoop) gameLoop.movePlayer(formattedRooms[current.east.id])
                 } else {
@@ -180,6 +217,7 @@ function Map() {
             } else if (e.key === "ArrowLeft") {
                 if (current.west.id) {
                     setCurrentRoom(formattedRooms[current.west.id])
+                    movement("w")
                     playSound()
                     if(gameLoop) gameLoop.movePlayer(formattedRooms[current.west.id])
                 } else {
@@ -188,24 +226,27 @@ function Map() {
 
             } else if (e.key === "ArrowUp") {
 
-                if (current.south.id) {
-                    setCurrentRoom(formattedRooms[current.south.id])
-                    playSound()
-                    if(gameLoop) gameLoop.movePlayer(formattedRooms[current.south.id])
-                } else {
-                    return
-                }
-
-            } else if (e.key === "ArrowDown") {
-
                 if (current.north.id) {
+                    movement("n")
                     setCurrentRoom(formattedRooms[current.north.id])
                     playSound()
                     if(gameLoop) gameLoop.movePlayer(formattedRooms[current.north.id])
                 } else {
                     return
                 }
+
+            } else if (e.key === "ArrowDown") {
+
+                if (current.south.id) {
+                    movement("s")
+                    setCurrentRoom(formattedRooms[current.south.id])
+                    playSound()
+                    if(gameLoop) gameLoop.movePlayer(formattedRooms[current.south.id])
+                } else {
+                    return
+                }
             }
+        }
 
         }
 
@@ -220,7 +261,7 @@ function Map() {
     }, [currentRoom])
 
     return ( 
-    <div style = {{position: "relative"}}>
+    <div className = 'map-container'>
         <div ref={canvasContainerRef} className = "Map" >
             {
                 loading ?

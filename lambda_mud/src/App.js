@@ -7,8 +7,7 @@ import NavBar from './components/Nav'
 import Footer from './components/Footer'
 import Register from './components/Register'
 import Login from './components/Login'
-import Map from "./game/Map"
-import RoomInfo from './game/RoomInfo'
+import Master from './game/Master'
 import { UserContext } from './contexts/UserContext';
 import { PlayersContext } from './contexts/PlayersContext'
 
@@ -34,8 +33,7 @@ function App() {
         <Switch>
           <Route path='/register' component={Register} />
           <Route path='/login' component = {Login} />
-          <Route path='/play' exact component={Map} />
-          <Route path='/room' component={RoomInfo} />
+          <Route path='/play' exact component={Master} />
         </Switch>
       <Footer />
       </PlayersContext.Provider>
