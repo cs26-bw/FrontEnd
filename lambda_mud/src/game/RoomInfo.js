@@ -2,8 +2,6 @@ import React, {useEffect, useState, useContext} from 'react'
 import {axiosWithAuth} from '../utils/AxiosWithAuth'
 import {UserContext} from "../contexts/UserContext"
 import { PlayersContext } from '../contexts/PlayersContext'
-import Control from './Control'
-import Players from './Players'
 
 import '../styles/game.scss'
 

@@ -1,18 +1,23 @@
 import React from 'react'
 import {Link} from "react-router-dom"
+
 import John from '../assets/John.JPG'
 import Brandon from '../assets/Brandon.JPG'
 import Armando from '../assets/Armando.JPG'
 import Daniel from '../assets/Daniel.JPG'
 import Luis from '../assets/Luis.JPG'
+import map from '../assets/screenshot.JPG'
+
+import '../styles/dashboard.scss'
 
 function Dashboard() {
 
     return (
         <div className='dashboard-container'>
-            <h1>Welcome To PyCity!</h1>
+            <h1>Welcome To <span>PyCity</span>.</h1>
+            <img className='header-img' src={map} alt='Map Screenshot'/>
             <h3>PyCity is a MUD consisting of 500 rooms for you to explore with other members of PyCity. Register with the button below to start your adventure!</h3>
-            <Link to='/register'><button>Register Here!</button></Link>
+            <Link to='/register'><button>REGISTER HERE!</button></Link>
             <div className='about-container'>
                 <h1>Meet The Team</h1>
                 <div className='team'>
