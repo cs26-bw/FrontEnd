@@ -11,7 +11,7 @@ import Room from './Room'
 import movement from '../assets/movement.mp3'
 import characterOne from '../assets/characterOne.svg'
 import { move } from 'formik';
-import MovementAudio from './SoundMovement';
+import BGMusic from './BackgroundMusic';
 
 
 const override = css`
@@ -213,8 +213,8 @@ function Map() {
 
 
     return ( 
-    <div>
-        <div ref={canvasContainerRef} className = "Map">
+    <div style = {{position: "relative"}}>
+        <div ref={canvasContainerRef} className = "Map" >
             {
                 loading ?
                 <HashLoader 
@@ -225,6 +225,7 @@ function Map() {
                 : <canvas ref={canvasRef}> </canvas>
             }
         </div>
+        <BGMusic />
         <audio ref = {audioRef}>
             <source src = {movement} type = "audio/mp3"></source>
         </audio>
