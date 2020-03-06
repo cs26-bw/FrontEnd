@@ -1,14 +1,14 @@
-import React, {useEffect, useState, useContext} from 'react'
+import React, {useContext} from 'react'
 import {axiosWithAuth} from '../utils/AxiosWithAuth'
 import {UserContext} from "../contexts/UserContext"
 import { PlayersContext } from '../contexts/PlayersContext'
-import axios from 'axios'
+
 
 function Control() {
 
     const {user, setUser} = useContext(UserContext)
     const {players, setPlayers} = useContext(PlayersContext)
-    // const [direction, setDirection] = useState({direction: ''})
+   
 
     
 
