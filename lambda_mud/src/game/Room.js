@@ -28,7 +28,6 @@ class Room {
     }
 
     draw(c, currentRoom, playerPos, character, deltaTime, size = null) {
-    //async draw (c, currentRoom, character, audio, size = null,) {
 
         if (!isNaN(deltaTime)) this.timeSinceStart += deltaTime;
 
@@ -101,9 +100,7 @@ class Room {
         }
         
         if(isCurrentRoom) {
-            audio.current.playbackRate = 1.45
-            audio.current.volume = .15
-            audio.current.play()
+
             c.drawImage(character.current, adjustedPosition.x - 20, adjustedPosition.y - 25, 40, 50)
             return
 

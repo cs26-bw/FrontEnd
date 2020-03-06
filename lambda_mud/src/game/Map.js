@@ -25,6 +25,7 @@ let formattedRooms = {}
 
 let gameLoop;//need to declare outside of Map() cause otherwise we'll lose reference to it and it will keep looping forever, never being garbage collected
 let characterImgRef = React.createRef();
+let audioRef = React.createRef();
 
 function Map() {
 
@@ -81,7 +82,6 @@ function Map() {
 
     let canvasRef = React.createRef();
     let canvasContainerRef = React.createRef();
-    let audioRef = React.createRef();
 
     useEffect(() => {
         setCanvas(canvasRef.current);
@@ -132,7 +132,7 @@ function Map() {
     useEffect(() => {
         if (canvas && currentRoom && rooms) {
             if (!gameLoop) {
-                gameLoop = new GameLoop(formattedRooms, currentRoom, canvas, characterImgRef);
+                gameLoop = new GameLoop(formattedRooms, currentRoom, canvas, characterImgRef, audioRef);
                 gameLoop.startLoop(); //start the frame loop
             }
             //  else {
@@ -152,6 +152,12 @@ function Map() {
 
     // !keyboard movement logic
 
+    const playSound = () => {
+        audioRef.current.playbackRate = 1.45
+        audioRef.current.volume = .15
+        audioRef.current.play()
+    }
+
     useEffect(() => {
 
         const handleMove = (e) => {
@@ -166,6 +172,7 @@ function Map() {
             if (e.key === "ArrowRight") {
                 if (current.east.id) {
                     setCurrentRoom(formattedRooms[current.east.id])
+                    playSound()
                     if(gameLoop) gameLoop.movePlayer(formattedRooms[current.east.id])
                 } else {
                     return
@@ -173,6 +180,7 @@ function Map() {
             } else if (e.key === "ArrowLeft") {
                 if (current.west.id) {
                     setCurrentRoom(formattedRooms[current.west.id])
+                    playSound()
                     if(gameLoop) gameLoop.movePlayer(formattedRooms[current.west.id])
                 } else {
                     return
@@ -182,6 +190,7 @@ function Map() {
 
                 if (current.south.id) {
                     setCurrentRoom(formattedRooms[current.south.id])
+                    playSound()
                     if(gameLoop) gameLoop.movePlayer(formattedRooms[current.south.id])
                 } else {
                     return
@@ -191,6 +200,7 @@ function Map() {
 
                 if (current.north.id) {
                     setCurrentRoom(formattedRooms[current.north.id])
+                    playSound()
                     if(gameLoop) gameLoop.movePlayer(formattedRooms[current.north.id])
                 } else {
                     return
