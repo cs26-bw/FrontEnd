@@ -3,10 +3,8 @@ import backgroundMusic from '../assets/backgroundMusic.ogg'
 import { Icon } from 'semantic-ui-react'
 
 const buttonStyles = {
-    position: "absolute",
-    top: "2rem",
-    right:"2rem",
-    color: "#ca3e47",
+    marginLeft: "5vw", 
+    color: "#ffffff",
     cursor: "pointer"
 }
 
@@ -19,7 +17,7 @@ const BGMusic = (props) => {
     useEffect(() => {
         
         if (music && !mutedBG){
-
+            
             music.current.volume = .1
             music.current.loop = true
             music.current.play();
@@ -34,12 +32,12 @@ const BGMusic = (props) => {
 
     return (
         
-        <div>
+        <div className="background-music">
 
             <Icon
             name = {mutedBG ? "volume off" : "volume up"}
             size = "big"
-            circular ={true}
+            
             onClick = {() => setMutedBG(!mutedBG)}
             style = {buttonStyles}
             />

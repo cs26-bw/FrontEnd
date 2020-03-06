@@ -12,7 +12,6 @@ class GameLoop {
     interpolatedPosition;
 
     constructor(formattedRooms, currentRoom, canvas, characterImgRef) {
-        console.log("Game loop constructor")
         this.c = canvas.getContext("2d");
         this.canvas = canvas
         this.formattedRooms = formattedRooms;
@@ -22,7 +21,6 @@ class GameLoop {
 
     startLoop() {
         this.shouldLoop = true;
-        console.log("Starting", this.formattedRooms)
         this.frame();
     }
 

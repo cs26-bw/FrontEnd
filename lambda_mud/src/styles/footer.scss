@@ -1,16 +1,23 @@
 footer{
-
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding:1.5rem 0 ;
-    text-align: center;
+    
+    width: 100vw;
+    height: 8vh;
     background-color: $alt-dark-grey;
     color: #ffffff;
-    span{
-        font-weight: bold;
-        color:$red;
+    margin: auto 0;
+    vertical-align: middle;
+    .footer-container{
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        .footer-text{
+            span{
+                font-weight: bold;
+                color:$red;
+            }
+        }
     }
 }
 

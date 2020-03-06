@@ -32,18 +32,15 @@ class Room {
         if (!isNaN(deltaTime)) this.timeSinceStart += deltaTime;
 
         //adjust this room's position so that the player's room is always drawn in the center of the screen
-        let adjustedPosition = { x: ((this.x - playerPos.x) * 100) + (window.innerWidth / 2), y: ((this.y - playerPos.y) * 100) + (window.innerHeight / 2) }
+        let adjustedPosition = { x: ((this.x - playerPos.x) * 100) + (window.innerWidth / 2), y: ((this.y - playerPos.y) * -100) + (window.innerHeight / 2) }
 
         if (this.startAnimationPlaying) {
 
-            //console.log(( 9.81 * Math.pow(deltaTime, 2) ) / 10000)
             //this.animationYVelocity = this.animationYVelocity - 1;
             if (!isNaN(deltaTime)) {
                 this.animationYVelocity = this.animationYVelocity + ((9.81 * Math.pow(deltaTime, 2)) / 10000); //add gravity to velocity
-                //console.log(this.animationYVelocity)
                 this.animationYPosition += this.animationYVelocity * deltaTime / 6;
             }
-            //console.log(this.animationYPosition)
 
             if (this.animationYPosition >= adjustedPosition.y) {
                 if (this.bounceCounter <= this.bounceLimit) {
@@ -82,7 +79,7 @@ class Room {
 
         if (this.north.title) {
             c.beginPath();
-            c.fillRect(adjustedPosition.x - 2.5, adjustedPosition.y, 5, this.connectionLength);
+            c.fillRect(adjustedPosition.x - 2.5, adjustedPosition.y, 5, -this.connectionLength);
         }
         if (this.east.title) {
             c.beginPath();
@@ -91,7 +88,7 @@ class Room {
 
         if (this.south.title) {
             c.beginPath();
-            c.fillRect(adjustedPosition.x - 2.5, adjustedPosition.y, 5, -this.connectionLength);
+            c.fillRect(adjustedPosition.x - 2.5, adjustedPosition.y, 5, this.connectionLength);
         }
 
         if (this.west.title) {

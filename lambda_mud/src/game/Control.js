@@ -8,9 +8,6 @@ function Control() {
 
     const {user, setUser} = useContext(UserContext)
     const {players, setPlayers} = useContext(PlayersContext)
-   
-
-    
 
     const handlePost = (compass) => {
         
@@ -18,7 +15,6 @@ function Control() {
         .post('https://ferrari-mud.herokuapp.com/api/adv/move', {direction: compass})
         .then(res => {
             setUser({...user, name: res.data.name, title: res.data.title, description: res.data.description, room_id: res.data.room_id, error_msg: res.data.error_msg})
-            console.log(user, 'user in control')
             setPlayers(res.data.players)
         })
         .catch(err => {
@@ -34,7 +30,7 @@ function Control() {
 
     return (
         <div className='btn-container'>
-            <p>PYCITY CONTROLLER</p>
+            <p>Remote</p>
             
         <button onClick={(_ => movement("n"))}>N</button>
         <div className="btn-middle">
