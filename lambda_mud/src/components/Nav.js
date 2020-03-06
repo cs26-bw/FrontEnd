@@ -11,7 +11,7 @@ const NavBar = () => {
 
     return (
         <div className = 'nav'>    
-            <h1>Py City<span>.</span></h1>
+            <Link to='/'><h1>Py City<span>.</span></h1></Link>
             <nav style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
                 {
                     isPlaying ?
