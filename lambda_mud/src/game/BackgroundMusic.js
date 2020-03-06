@@ -21,6 +21,7 @@ const BGMusic = (props) => {
         if (music && !mutedBG){
 
             music.current.volume = .1
+            music.current.loop = true
             music.current.play();
 
         }else if(music && mutedBG){
